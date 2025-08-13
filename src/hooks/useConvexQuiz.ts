@@ -81,6 +81,9 @@ export function useConvexQuiz(retakeFromSessionId?: Id<"quizSessions"> | null) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (!quiz && !error) {
+        console.error("🔍 Debug - Quiz not loaded after 10s. Quiz state:", quiz);
+        console.error("🔍 Debug - Current URL:", window.location.href);
+        console.error("🔍 Debug - Convex URL:", process.env.NEXT_PUBLIC_CONVEX_URL);
         setError("Failed to connect to quiz database. This might be due to network issues or ad blockers. Please check your internet connection and try refreshing the page.");
       }
     }, 10000);
