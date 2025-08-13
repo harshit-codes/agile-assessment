@@ -17,11 +17,42 @@ export async function GET(request: NextRequest) {
     // Get branding configuration from database
     // Since we're in Edge runtime, we'll use defaults and eventually move to a separate branding API
     const brandingConfig = {
-      companyName: "Agile Academy",
-      websiteUrl: "theagilecoach.com", 
+      companyName: "The Agile Coach",
+      websiteUrl: "quiz.theagilecoach.com", 
       logoPath: "/logo.png",
-      poweredByText: "Powered by Agile Academy",
+      poweredByText: "Powered by The Agile Coach",
     };
+
+    // Color scheme based on personality type
+    const getColorScheme = (shortName: string) => {
+      // Dynamic types get blue tones
+      if (shortName.startsWith('D')) {
+        return {
+          primary: '#6495ED',
+          primaryRgb: '100, 149, 237',
+          background: 'linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%)',
+          accent: '#4F46E5'
+        };
+      }
+      // Structured types get green tones
+      else if (shortName.startsWith('S')) {
+        return {
+          primary: '#10b981',
+          primaryRgb: '16, 185, 129',
+          background: 'linear-gradient(135deg, #ecfdf5 0%, #f1f5f9 100%)',
+          accent: '#059669'
+        };
+      }
+      // Default to teal
+      return {
+        primary: '#10b981',
+        primaryRgb: '16, 185, 129',
+        background: 'linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%)',
+        accent: '#0d9488'
+      };
+    };
+
+    const colors = getColorScheme(shortName);
     
     // Load logo and character image from public directory
     const logoUrl = new URL(brandingConfig.logoPath, request.url).href;
@@ -31,7 +62,7 @@ export async function GET(request: NextRequest) {
       (
         <div
           style={{
-            background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+            background: colors.background,
             width: '1200',
             height: '630',
             display: 'flex',
@@ -63,7 +94,7 @@ export async function GET(request: NextRequest) {
                 style={{
                   width: '20px',
                   height: '20px',
-                  backgroundColor: '#10b981',
+                  backgroundColor: colors.primary,
                   borderRadius: '50%',
                 }}
               />
@@ -71,10 +102,10 @@ export async function GET(request: NextRequest) {
                 style={{
                   fontSize: '24px',
                   fontWeight: 'bold',
-                  color: '#10b981',
+                  color: colors.primary,
                 }}
               >
-                Your Agile DNA Report
+                {userName ? `${userName}'s Agile Assessment` : 'Your Agile DNA Report'}
               </div>
             </div>
           </div>
@@ -93,14 +124,15 @@ export async function GET(request: NextRequest) {
             <img
               src={characterImageUrl}
               alt={personalityName}
-              width="100"
-              height="100"
+              width="120"
+              height="120"
               style={{ 
                 imageRendering: 'pixelated',
-                marginBottom: '15px',
-                borderRadius: '12px',
-                border: '2px solid rgba(16, 185, 129, 0.3)',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                marginBottom: '20px',
+                borderRadius: '16px',
+                border: `3px solid rgba(${colors.primaryRgb}, 0.4)`,
+                boxShadow: `0 8px 16px rgba(${colors.primaryRgb}, 0.2)`,
+                background: `rgba(${colors.primaryRgb}, 0.05)`,
               }}
             />
 
@@ -124,21 +156,21 @@ export async function GET(request: NextRequest) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                border: '2px solid rgba(16, 185, 129, 0.2)',
+                backgroundColor: `rgba(${colors.primaryRgb}, 0.15)`,
+                border: `2px solid rgba(${colors.primaryRgb}, 0.3)`,
                 borderRadius: '9999px',
-                padding: '6px 14px',
-                marginBottom: '15px',
+                padding: '8px 16px',
+                marginBottom: '20px',
               }}
             >
               <div
                 style={{
-                  fontSize: '16px',
+                  fontSize: '18px',
                   fontWeight: 'bold',
-                  color: '#10b981',
+                  color: colors.accent,
                 }}
               >
-                Type: {shortName}
+                {shortName}
               </div>
             </div>
 
@@ -187,18 +219,18 @@ export async function GET(request: NextRequest) {
                     maxWidth: '500px',
                   }}
                 >
-                  {characteristics.slice(0, 6).map((char, index) => (
+                  {characteristics.slice(0, 5).map((char, index) => (
                     <div
                       key={index}
                       style={{
-                        backgroundColor: 'rgba(16, 185, 129, 0.9)',
+                        backgroundColor: colors.primary,
                         color: 'white',
-                        padding: '4px 10px',
+                        padding: '6px 12px',
                         borderRadius: '9999px',
-                        fontSize: '12px',
-                        fontWeight: '500',
-                        border: '1px solid #10b981',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        fontSize: '13px',
+                        fontWeight: '600',
+                        border: `1px solid ${colors.accent}`,
+                        boxShadow: `0 3px 6px rgba(${colors.primaryRgb}, 0.2)`,
                       }}
                     >
                       {char.trim()}
@@ -213,23 +245,24 @@ export async function GET(request: NextRequest) {
               <div
                 style={{
                   display: 'flex',
-                  background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(6, 214, 160, 0.1))',
-                  border: '2px solid rgba(16, 185, 129, 0.2)',
-                  borderRadius: '12px',
-                  padding: '12px 20px',
+                  background: `linear-gradient(90deg, rgba(${colors.primaryRgb}, 0.1), rgba(${colors.primaryRgb}, 0.05))`,
+                  border: `2px solid rgba(${colors.primaryRgb}, 0.3)`,
+                  borderRadius: '16px',
+                  padding: '16px 24px',
                   marginBottom: '10px',
-                  maxWidth: '500px',
+                  maxWidth: '600px',
                 }}
               >
                 <div
                   style={{
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    color: '#0f172a',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: colors.accent,
                     textAlign: 'center',
+                    fontStyle: 'italic',
                   }}
                 >
-                  💫 {motto}
+                  "{motto.replace(/['"]/g, '')}"
                 </div>
               </div>
             )}
@@ -274,7 +307,7 @@ export async function GET(request: NextRequest) {
               style={{
                 display: 'flex',
                 fontSize: '14px',
-                color: '#10b981',
+                color: colors.primary,
                 fontWeight: '600',
               }}
             >

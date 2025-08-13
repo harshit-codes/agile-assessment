@@ -8,6 +8,7 @@ import HeroSection from "@/components/hero/HeroSection";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import QuizComponent from "@/components/features/quiz/QuizComponent";
 import LightRays from "@/components/LightRays/LightRays";
+import StructuredData from "@/components/seo/StructuredData";
 
 function WelcomeScreen() {
   return (
@@ -68,5 +69,11 @@ export default function HomePage() {
   }
 
   // Show landing page for anonymous users
-  return <WelcomeScreen />;
+  return (
+    <>
+      <StructuredData type="website" />
+      <StructuredData type="assessment" />
+      <WelcomeScreen />
+    </>
+  );
 }

@@ -10,7 +10,7 @@ I noticed you're a [role] at [company] - I've been following your posts about [s
 
 Quick question: How's your team handling the challenge of balancing different work styles in your Agile processes? I've been working with teams who struggle with this exact issue.
 
-I recently helped a [similar role/company type] team improve their sprint velocity by 40% just by understanding their team's behavioral dynamics better. The breakthrough came from a simple 8-minute assessment that revealed how each team member naturally prefers to work and communicate.
+I recently helped a [similar role/company type] team improve their sprint velocity by 40% just by understanding their team's behavioral dynamics better. The breakthrough came from a simple 8-10 minute Agile DNA assessment that revealed how each team member naturally prefers to work and communicate.
 
 Would love to share the approach with you if you think it might be helpful for your team. No sales pitch - just sharing what's working for other [industry/role] professionals.
 
@@ -25,7 +25,7 @@ Saw your recent post about [specific Agile challenge they mentioned]. That reson
 
 Here's something interesting: Most team "personality conflicts" aren't actually personality problems at all. They're communication style mismatches that can be solved pretty quickly once you understand the underlying patterns.
 
-I've got a free assessment that reveals the 4 behavioral dimensions every Agile team needs to understand. Takes 8 minutes, and I've seen teams go from constant friction to high performance in just one sprint cycle.
+I've got a free Agile DNA assessment that reveals the 4 behavioral dimensions every Agile team needs to understand. Takes 8-10 minutes, and I've seen teams go from constant friction to high performance in just one sprint cycle.
 
 No strings attached - would you be interested in checking it out? Happy to share what I've learned about making these insights practical for [their specific context - remote teams/enterprise/startup/etc.].
 
@@ -44,7 +44,7 @@ Turns out, it usually comes down to 4 specific behavioral differences that most 
 • Communication styles (direct vs. collaborative)
 • Focus orientation (strategic vs. people-centered)
 
-I created a quick assessment to help teams understand these patterns. It's been a game-changer for the teams I've worked with - one saw 40% velocity improvement in 3 weeks.
+I created a quick Agile DNA assessment to help teams understand these patterns with character avatars. It's been a game-changer for the teams I've worked with - one saw 40% velocity improvement in 3 weeks.
 
 Would this be relevant for your team at [company]? Happy to share the assessment and some implementation tips if you think it could help.
 
@@ -63,7 +63,7 @@ Loved your tweet about [specific tweet content].
 
 Quick question - have you ever noticed how some team conflicts aren't really about the work, but about different working styles?
 
-I've got a free 8-minute assessment that helps Agile teams understand their behavioral dynamics. It's helped 10,000+ professionals find their ideal team roles.
+I've got a free 8-10 minute Agile DNA assessment that helps Agile teams understand their behavioral dynamics with character avatars. It's helped 10,000+ professionals find their ideal team roles.
 
 Mind if I share the link? No sales pitch - just think you'd find the insights valuable for your work in [their area].
 ```
@@ -74,7 +74,7 @@ Mind if I share the link? No sales pitch - just think you'd find the insights va
 
 Been working with teams on this exact challenge. Found something interesting: most "difficult teammates" aren't difficult - they just work differently than we expect.
 
-Created a quick assessment that reveals the 4 key behavioral dimensions for Agile teams. Teams using it see 40% better velocity + way fewer conflicts.
+Created a quick Agile DNA assessment that reveals the 4 key behavioral dimensions for Agile teams with character avatars. Teams using it see 40% better velocity + way fewer conflicts.
 
 Worth 2 minutes of your time? Think you'd get some good insights for your [role/team/company].
 ```
@@ -91,7 +91,7 @@ Just saw your story about [work/team challenge] - totally get that struggle!
 
 I've been helping teams figure out why some people just seem to "click" while others constantly clash. 
 
-Created this quick personality assessment specifically for Agile teams - takes 8 minutes and shows you exactly how to work best with different personality types.
+Created this quick Agile DNA assessment specifically for Agile teams - takes 8-10 minutes and shows you exactly how to work best with different personality types with character avatars.
 
 Over 10k people have taken it and the feedback has been incredible. Want to check it out?
 
@@ -108,9 +108,9 @@ Hey [Name]!
 
 Remember when you mentioned your team struggles with [specific issue]? 
 
-I found something that might help - it's a free assessment that shows how different personality types work best in Agile teams.
+I found something that might help - it's a free Agile DNA assessment that shows how different personality types work best in Agile teams with character avatars.
 
-Takes 8 minutes and gives you insights on communication styles, work preferences, and team dynamics.
+Takes 8-10 minutes and gives you insights on communication styles, work preferences, and team dynamics.
 
 I tried it and it was scarily accurate! Explains so much about why I work well with some people and not others 😅
 
@@ -127,7 +127,7 @@ Subject: Quick follow-up on team dynamics
 
 Hey [Name],
 
-Sent you a message last week about the Agile team assessment - no worries if you didn't have a chance to check it out!
+Sent you a message last week about the Agile DNA assessment - no worries if you didn't have a chance to check it out!
 
 Just wanted to share a quick win story: A team I worked with last month was struggling with 4-hour sprint planning meetings that ended in arguments. After understanding their behavioral styles, they cut planning to 90 minutes and everyone actually enjoyed the process.
 
@@ -145,7 +145,7 @@ Subject: Your team assessment results + next steps
 
 Hi [Name],
 
-Great to connect yesterday! As promised, here's the link to the 4-dimensional Agile assessment: [link]
+Great to connect yesterday! As promised, here's the link to the 4-dimensional Agile DNA assessment: [link]
 
 A few things that might be helpful as you explore this with your team:
 
@@ -189,7 +189,7 @@ Would love to hear your perspective on this!
 ```
 [Name], been thinking about your insights on [reference their response].
 
-I've put together a free assessment that helps teams understand their behavioral dynamics - specifically designed for Agile environments. It's helped 10,000+ professionals optimize their team roles.
+I've put together a free Agile DNA assessment that helps teams understand their behavioral dynamics with character avatars - specifically designed for Agile environments. It's helped 10,000+ professionals optimize their team roles.
 
 Think it might be relevant for your team at [company]? Happy to share if you're interested in exploring team dynamics further.
 
@@ -206,7 +206,7 @@ Either way, appreciate the connection and insights!
 
 I've been working with Agile teams on something you mentioned: understanding why some team members just seem to clash even when they're all talented people.
 
-Created a quick assessment that reveals the behavioral patterns behind these dynamics. Takes 8 minutes and gives teams actionable insights they can use immediately.
+Created a quick Agile DNA assessment that reveals the behavioral patterns behind these dynamics with character avatars. Takes 8-10 minutes and gives teams actionable insights they can use immediately.
 
 Would love to share it with you if you think it could help your team. Shooting you a message with details - no pressure, just think you'd find it valuable!"
 ```
@@ -223,7 +223,7 @@ How people prefer to organize work, make decisions, communicate feedback, and wh
 
 When teams understand these patterns, everything changes. Planning becomes collaborative, conflicts become problem-solving sessions, and everyone actually enjoys the process.
 
-I created a free assessment to help teams understand these dynamics. Over 10,000 professionals have used it to improve their team experience.
+I created a free Agile DNA assessment to help teams understand these dynamics with character avatars. Over 10,000 professionals have used it to improve their team experience.
 
 Thought you might find it valuable given your work at [company]. Sending you the details - would love to hear what you think!"
 ```
@@ -237,8 +237,8 @@ Thought you might find it valuable given your work at [company]. Sending you the
 Awesome! Here's the link to the assessment: [link]
 
 Few quick tips:
-• Takes about 8 minutes - all questions relate to work preferences  
-• Results show your natural Agile personality + ideal roles
+• Takes about 8-10 minutes - all questions relate to work preferences  
+• Results show your natural Agile DNA personality + character avatar + ideal roles
 • Great to discuss with your team in retrospectives
 
 Let me know what you discover! Always curious to hear how different teams use these insights.

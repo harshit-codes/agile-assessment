@@ -3,9 +3,9 @@
 ## Main Newsletter Feature Story
 
 ### Subject Lines (A/B Test Options)
-- **Curiosity-Driven**: "The 8-minute secret that's transforming Agile teams"
+- **Curiosity-Driven**: "The 8-10 minute Agile DNA secret that's transforming teams"
 - **Problem-Focused**: "Why your last sprint failed (and it's not what you think)"
-- **Benefit-Focused**: "Finally: A personality assessment designed specifically for Agile teams"
+- **Benefit-Focused**: "Finally: An Agile DNA assessment designed specifically for Agile teams"
 - **Question-Based**: "What if your team conflicts were actually your strength?"
 
 ---
@@ -107,10 +107,10 @@ Our 4-dimensional model isn't just theory—it's built on:
 - **Psychometric rigor** including reverse-scored questions and bias elimination
 - **Practical application** tested across Fortune 500 companies and startups
 
-### **What You'll Discover in 8 Minutes**
+### **What You'll Discover in 8-10 Minutes**
 
-**📊 Your Agile Personality Type**  
-One of 16 unique combinations mapped to specific roles and strengths
+**📊 Your Agile DNA Personality Type**  
+One of 16 unique combinations with character avatar mapped to specific roles and strengths
 
 **🎯 Role Optimization Guidance**  
 Which Scrum roles align with your natural preferences and where you'll excel
@@ -137,7 +137,7 @@ Growth paths that align with your personality for long-term satisfaction and suc
 
 ### **Ready to Transform Your Team Experience?**
 
-The assessment takes just 8 minutes but provides insights you'll use for your entire career.
+The assessment takes just 8-10 minutes but provides insights you'll use for your entire career.
 
 **What makes this different:**
 ✅ **Designed specifically for Agile environments** - not generic workplace situations  
@@ -147,9 +147,9 @@ The assessment takes just 8 minutes but provides insights you'll use for your en
 ✅ **Career guidance** aligned with your natural personality strengths  
 ✅ **Completely free** - no hidden costs, premium features, or email gates
 
-**[Take Your Free Assessment Now →]**
+**[Take Your Free Agile DNA Assessment Now →]**
 
-*Results in under 8 minutes. Sharable with your team for better collaboration.*
+*Results in under 10 minutes. Sharable with your team with professional preview cards for better collaboration.*
 
 ---
 
@@ -229,7 +229,7 @@ Last week, a Scrum Master wrote to tell me her team went from dysfunction to hig
 
 **The result?** 40% better velocity, zero conflicts, happier team.
 
-Want to discover your Agile personality? Take our free 8-minute assessment.
+Want to discover your Agile DNA? Take our free 8-10 minute assessment with character avatar.
 
 **[Discover Your Type →]**
 
@@ -253,9 +253,9 @@ You joined because you care about building better teams. Over the next few weeks
 
 Our free 4-Dimensional Agile Assessment reveals your unique personality type and how it impacts your team interactions. Over 10,000 professionals have used it to optimize their roles and improve team performance.
 
-**Takes 8 minutes. Provides insights you'll use forever.**
+**Takes 8-10 minutes. Provides Agile DNA insights you'll use forever.**
 
-**[Take Your Assessment →]**
+**[Take Your Agile DNA Assessment →]**
 
 Once you get your results, hit reply and let me know what you discovered—I love hearing about those "aha!" moments.
 

@@ -21,7 +21,7 @@ When teams understand these dimensions, magic happens:
 
 **Real example**: One team struggled with constant planning disagreements. Turns out their Product Owner was Evidence-Based while their Tech Lead was Intuitive. Once they learned to present information differently to each other, planning sessions went from 4 hours to 90 minutes.
 
-Want to discover your Agile personality? Take our free 8-minute assessment and get instant insights into your ideal team role.
+Want to discover your Agile DNA? Take our free 8-10 minute assessment and get instant insights with character avatar into your ideal team role.
 
 👆 **Link in comments** (because LinkedIn algorithms love engagement!)
 
@@ -89,12 +89,12 @@ It's not about changing people—it's about understanding them.
 **Tweet 7/7** (267 characters)
 Want to discover your Agile DNA? 
 
-Take our free 4-dimensional assessment:
-⏱️ 8 minutes
+Take our free 4-dimensional Agile DNA assessment:
+⏱️ 8-10 minutes
 📱 32 questions  
-🎯 16 personality types
+🎯 16 personality types with character avatars
 💰 Completely free
-📊 Instant results
+📊 Instant Agile DNA Report
 
 [Link in bio]
 
@@ -125,7 +125,7 @@ When you understand your team's behavioral DNA:
 
 **Real talk**: I've seen teams go from dysfunction to high-performance in ONE SPRINT just by understanding these dimensions. ⠀
 
-Ready to discover your Agile personality? Link in bio for a free 8-minute assessment that'll change how you see teamwork forever. ⠀
+Ready to discover your Agile DNA? Link in bio for a free 8-10 minute assessment with character avatar that'll change how you see teamwork forever. ⠀
 
 **Question for you**: What's the biggest challenge your team faces? Drop it in the comments—let's solve it together! 👇 ⠀
 
@@ -191,16 +191,16 @@ When teams understand these behavioral patterns, everything changes:
 
 **WANT TO TRY THIS WITH YOUR TEAM?**
 
-I've created a free 8-minute assessment that reveals your unique Agile personality across these 4 dimensions. Over 10,000 professionals have already discovered insights that transformed their team experience.
+I've created a free Agile DNA assessment that reveals your unique personality across these 4 dimensions with character avatar. Over 10,000 professionals have already discovered insights that transformed their team experience.
 
 **What you'll get**:
-🎯 Your specific Agile personality type (out of 16 possibilities)
+🎯 Your specific Agile DNA personality type with character avatar (out of 16 possibilities)
 📊 Detailed behavioral analysis and strengths
 🚀 Career path guidance for Agile roles
 🤝 Communication strategies for better collaboration
 💡 Team building insights you can apply immediately
 
-**The best part?** It's completely free, takes 8 minutes, and gives you instant results you can share with your team.
+**The best part?** It's completely free, takes 8-10 minutes, and gives you instant Agile DNA Report with character avatar you can share with your team.
 
 **Ready to transform your team dynamics?** 
 
@@ -231,7 +231,7 @@ Comment "ASSESSMENT" below and I'll send you the link, plus a bonus guide on "5 
 ## Email Subject Lines (A/B Testing Options)
 
 **Curiosity-Driven:**
-- "The 8-minute assessment that's transforming Agile teams"
+- "The 8-10 minute Agile DNA assessment that's transforming teams"
 - "Your team conflicts aren't what you think they are"
 - "Why your last sprint failed (and how to fix it)"
 
@@ -243,11 +243,11 @@ Comment "ASSESSMENT" below and I'll send you the link, plus a bonus guide on "5 
 **Question-Based:**
 - "What if personality differences were actually your strength?"
 - "Are you missing your team's hidden potential?"
-- "Could 8 minutes solve your biggest team challenge?"
+- "Could 8-10 minutes solve your biggest team challenge?"
 
 **Urgency/Social Proof:**
 - "Join 10,000+ professionals who discovered their Agile DNA"
-- "The team assessment every Scrum Master is talking about"
+- "The Agile DNA assessment every Scrum Master is talking about"
 - "Before your next retrospective, read this"
 
 ---

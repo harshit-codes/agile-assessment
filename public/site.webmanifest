@@ -1,33 +1,59 @@
 {
-  "name": "Agile Assessment - Find Your Perfect Agile Role",
+  "name": "The Agile Assessment - Find Your Perfect Agile Role",
   "short_name": "Agile Assessment",
-  "description": "Discover your ideal Scrum team role with our comprehensive personality assessment. Map your unique behavioral traits to 16 distinct personality types.",
+  "description": "Discover your ideal Scrum team role with our comprehensive 4-dimensional personality assessment. Map your unique behavioral traits to 16 distinct personality types and accelerate your Agile career.",
   "icons": [
     {
       "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/favicon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#4F46E5",
-  "background_color": "#0a0a0a",
+  "background_color": "#1a1b2e",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en-US",
-  "categories": ["business", "productivity", "education"],
+  "dir": "ltr",
+  "categories": ["business", "productivity", "education", "lifestyle"],
   "screenshots": [
     {
-      "src": "/og-image.png",
+      "src": "/api/og/personality-report?name=The%20Agile%20Assessment&shortName=QUIZ&description=4-dimensional%20personality%20assessment&characteristics=Comprehensive,Data-driven,Career-focused,Team-oriented&motto=Find%20Your%20Perfect%20Agile%20Role",
       "sizes": "1200x630",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "Assessment Overview"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Take Assessment",
+      "short_name": "Assessment",
+      "description": "Start the 4-dimensional personality assessment",
+      "url": "/",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Results",
+      "short_name": "Results",
+      "description": "View and share assessment results",
+      "url": "/results/",
+      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
     }
   ]
 }

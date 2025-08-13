@@ -124,23 +124,23 @@ Our 4-dimensional model isn't just theoretical—it's built on solid psychologic
 ### **Faster Conflict Resolution**
 *"When tensions arise, we now understand it's often about different work styles, not personal issues. Conflicts that used to take days to resolve now get handled in hours."* - Marcus R., Agile Coach
 
-## The Assessment Experience: 8 Minutes to Transformation
+## The Assessment Experience: 8-10 Minutes to Transformation
 
 We've designed the assessment experience to be as streamlined and user-friendly as possible:
 
 **📱 Mobile-Optimized**: Take it anywhere, on any device
-**⏱️ 8 Minutes**: Just 32 carefully crafted questions  
+**⏱️ 8-10 Minutes**: Just 32 carefully crafted questions  
 **🎯 Scientifically Valid**: Psychometrically sound with reverse-scoring
-**📊 Instant Results**: Immediate, comprehensive personality profile
-**🔗 Shareable**: Perfect for team-building and role discussions
+**📊 Instant Agile DNA Report**: Immediate, comprehensive personality profile with character avatar
+**🔗 Shareable**: Professional preview cards perfect for team-building and role discussions
 **💰 Completely Free**: No hidden costs or premium features
 
 ## Understanding Your Results: From Insight to Action
 
 Once you complete the assessment, you'll receive:
 
-### **Your Personality Type**
-A comprehensive profile including your unique combination of the four dimensions, such as "The Dynamic Facilitator" (Dynamic + Evidence-Based + Harmonizing + People-Centered) or "The Strategic Specialist" (Structured + Intuitive + Direct + Visionary).
+### **Your Agile DNA Report**
+A comprehensive profile including your unique combination of the four dimensions, complete with a character avatar and your personality type such as "The Dynamic Facilitator" (Dynamic + Evidence-Based + Harmonizing + People-Centered) or "The Strategic Specialist" (Structured + Intuitive + Direct + Visionary).
 
 ### **Detailed Behavioral Analysis**
 - Specific strengths you bring to Agile teams
@@ -198,7 +198,7 @@ Organizations that invest in understanding their teams' behavioral dynamics cons
 
 Whether you're an individual contributor looking to optimize your career path, a Scrum Master seeking to improve team dynamics, or an Agile Coach working to build high-performance teams, understanding personality dimensions is no longer optional—it's essential.
 
-The assessment takes just 8 minutes, but the insights last a lifetime. You'll gain:
+The assessment takes just 8-10 minutes, but the insights last a lifetime. You'll gain:
 
 ✅ **Clear understanding** of your natural work style and preferences  
 ✅ **Specific guidance** on Agile roles where you'll excel  
@@ -213,12 +213,12 @@ Join thousands of professionals who have already discovered their Agile personal
 
 **[Take the Free Assessment Now →](https://your-domain.com)**
 
-*Results in under 8 minutes. No email required. Shareable with your team.*
+*Results in under 10 minutes. No email required. Shareable with professional preview cards.*
 
 ---
 
 ### About the Assessment
 
-This 4-dimensional Agile personality assessment was developed by behavioral psychology experts and validated with over 10,000 Agile professionals across Fortune 500 companies and fast-growing startups. The assessment is completely free, takes 8 minutes to complete, and provides instant, comprehensive results you can immediately apply to improve your Agile experience.
+This 4-dimensional Agile DNA assessment was developed by behavioral psychology experts and validated with over 10,000 Agile professionals across Fortune 500 companies and fast-growing startups. The assessment is completely free, takes 8-10 minutes to complete, and provides instant, comprehensive Agile DNA Report with character avatar that you can immediately apply to improve your Agile experience.
 
 *Have questions about implementing personality assessments in your organization? We offer free consultation calls to help teams leverage these insights effectively.* **[Schedule your call →](https://calendly.com/aayush-agileacademy)**
