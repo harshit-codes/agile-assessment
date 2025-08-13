@@ -144,6 +144,15 @@ export default function RootLayout({
             rel="stylesheet" 
           />
           
+          {/* Debug script to verify JavaScript execution */}
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              console.log("🔍 Debug - Layout script executing");
+              console.log("🔍 Debug - NEXT_PUBLIC_CONVEX_URL:", "${process.env.NEXT_PUBLIC_CONVEX_URL}");
+              console.log("🔍 Debug - Window location:", window.location.href);
+            `
+          }} />
+          
           {/* Critical CSS Variables Inlined to Prevent FOUC */}
           <style dangerouslySetInnerHTML={{
             __html: `

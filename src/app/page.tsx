@@ -52,6 +52,9 @@ function QuizLoader() {
 }
 
 export default function HomePage() {
+  console.log("🔍 Debug - HomePage component rendering");
+  console.log("🔍 Debug - CONVEX_URL in component:", process.env.NEXT_PUBLIC_CONVEX_URL);
+  
   const { isSignedIn, isLoaded } = useUser();
 
   // Show loading while Clerk is initializing
