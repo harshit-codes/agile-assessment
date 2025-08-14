@@ -274,8 +274,8 @@ export default function RootLayout({
             `
           }} />
           <GraphQLProvider>
-            {/* Performance Monitoring */}
-            <WebVitals debug={process.env.NODE_ENV === 'development'} />
+            {/* Performance Monitoring - Temporarily disabled due to web-vitals import issues */}
+            {/* <WebVitals debug={process.env.NODE_ENV === 'development'} /> */}
             
             {/* Production Debugging */}
             <ProductionDebugger enabledInProduction={true} />

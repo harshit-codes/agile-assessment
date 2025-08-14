@@ -14,7 +14,7 @@
  */
 
 import { useEffect } from 'react';
-import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import { Metric } from 'web-vitals';
 import { logger } from '@/lib/logger';
 
 interface WebVitalsProps {
@@ -86,12 +86,51 @@ export default function WebVitals({ debug = false }: WebVitalsProps) {
       action: 'initialize'
     });
 
-    // Measure Core Web Vitals
-    getCLS((metric: Metric) => reportWebVital(metric, debug));
-    getFID((metric: Metric) => reportWebVital(metric, debug));
-    getFCP((metric: Metric) => reportWebVital(metric, debug));
-    getLCP((metric: Metric) => reportWebVital(metric, debug));
-    getTTFB((metric: Metric) => reportWebVital(metric, debug));
+    // Measure Core Web Vitals using dynamic imports to handle version compatibility
+    const measureWebVitals = async () => {
+      try {
+        const webVitals = await import('web-vitals');
+        
+        // Use the correct import method based on the version
+        if (webVitals.getCLS) {
+          webVitals.getCLS((metric: Metric) => reportWebVital(metric, debug));
+        } else if ((webVitals as any).onCLS) {
+          (webVitals as any).onCLS((metric: Metric) => reportWebVital(metric, debug));
+        }
+        
+        if (webVitals.getFID) {
+          webVitals.getFID((metric: Metric) => reportWebVital(metric, debug));
+        } else if ((webVitals as any).onFID) {
+          (webVitals as any).onFID((metric: Metric) => reportWebVital(metric, debug));
+        }
+        
+        if (webVitals.getFCP) {
+          webVitals.getFCP((metric: Metric) => reportWebVital(metric, debug));
+        } else if ((webVitals as any).onFCP) {
+          (webVitals as any).onFCP((metric: Metric) => reportWebVital(metric, debug));
+        }
+        
+        if (webVitals.getLCP) {
+          webVitals.getLCP((metric: Metric) => reportWebVital(metric, debug));
+        } else if ((webVitals as any).onLCP) {
+          (webVitals as any).onLCP((metric: Metric) => reportWebVital(metric, debug));
+        }
+        
+        if (webVitals.getTTFB) {
+          webVitals.getTTFB((metric: Metric) => reportWebVital(metric, debug));
+        } else if ((webVitals as any).onTTFB) {
+          (webVitals as any).onTTFB((metric: Metric) => reportWebVital(metric, debug));
+        }
+      } catch (error) {
+        logger.warn('Web Vitals measurement failed', {
+          component: 'WebVitals',
+          action: 'measurement_error',
+          error: error instanceof Error ? error.message : String(error)
+        });
+      }
+    };
+    
+    measureWebVitals();
 
     // Custom performance observer for component renders
     if ('PerformanceObserver' in window) {
