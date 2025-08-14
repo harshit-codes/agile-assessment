@@ -61,7 +61,7 @@ export default function EngagementSection({
                 className="w-full"
               >
                 <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-lg" size="lg">
-                  <span className="flex items-center justify-center font-medium">
+                  <span className="flex items-center justify-center font-medium text-foreground">
                     <Calendar className="mr-3 h-6 w-6" />
                     Book Expert Consultation
                   </span>
@@ -154,7 +154,7 @@ export default function EngagementSection({
                 className="w-full"
               >
                 <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-lg" size="lg">
-                  <span className="flex items-center justify-center font-medium">
+                  <span className="flex items-center justify-center font-medium text-foreground">
                     <Calendar className="mr-3 h-6 w-6" />
                     Book Expert Consultation
                   </span>

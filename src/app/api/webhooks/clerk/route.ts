@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
-import { api } from '../../../../../convex/_generated/api';
-import { fetchMutation } from 'convex/nextjs';
+import { DELETE_USER_ACCOUNT } from '@/lib/graphql/operations';
+import { getClient } from '@/lib/apollo-client';
 
 // Clerk webhook event types
 interface ClerkWebhookEvent {
@@ -79,28 +79,30 @@ export async function POST(request: NextRequest) {
       console.log(`🗑️ Processing user deletion for Clerk ID: ${clerkUserId}`);
 
       try {
-        // Call Convex mutation to delete user data
-        const result = await fetchMutation(api.userProfiles.deleteUserAccount, {
-          clerkUserId
+        // Call GraphQL mutation to delete user data
+        const client = getClient();
+        const result = await client.mutate({
+          mutation: DELETE_USER_ACCOUNT,
+          variables: { clerkUserId }
         });
 
-        console.log('✅ User account deletion completed:', result);
+        console.log('✅ User account deletion completed:', result.data);
 
         return NextResponse.json({
           success: true,
           message: 'User account deleted successfully',
-          result
+          result: result.data
         });
 
-      } catch (convexError) {
-        console.error('❌ Error deleting user data from Convex:', convexError);
+      } catch (graphqlError) {
+        console.error('❌ Error deleting user data from GraphQL:', graphqlError);
         
         // Return 200 to prevent Clerk from retrying if it's a data issue
         // But log the error for investigation
         return NextResponse.json({
           success: false,
           message: 'Error processing deletion',
-          error: convexError instanceof Error ? convexError.message : 'Unknown Convex error'
+          error: graphqlError instanceof Error ? graphqlError.message : 'Unknown GraphQL error'
         }, { status: 500 });
       }
     }

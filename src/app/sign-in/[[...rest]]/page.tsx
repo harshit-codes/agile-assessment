@@ -4,6 +4,7 @@ export default function Page() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <SignIn 
+        routing="hash"
         appearance={{
           elements: {
             formButtonPrimary: "bg-primary hover:bg-primary/90",

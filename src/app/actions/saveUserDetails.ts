@@ -1,10 +1,8 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server';
-import { api } from '../../../convex/_generated/api';
-import { ConvexHttpClient } from 'convex/browser';
-
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+import { UPDATE_ONBOARDING_DATA } from '@/lib/graphql/operations';
+import { getClient } from '@/lib/apollo-client';
 
 export interface UserDetails {
   whatsapp?: string;
@@ -21,15 +19,19 @@ export async function saveUserDetails(details: UserDetails) {
     }
 
     // All fields are optional since name and email come from Clerk auth
-    // Update Convex user profile with onboarding data
-    await convex.mutation(api.userProfiles.updateOnboardingData, {
-      clerkUserId: userId,
-      onboardingData: {
-        onboardingComplete: true,
-        whatsapp: details.whatsapp || undefined,
-        linkedinUrl: details.linkedinUrl || undefined,
-        currentRole: details.currentRole || undefined,
-      },
+    // Update GraphQL user profile with onboarding data
+    const client = getClient();
+    await client.mutate({
+      mutation: UPDATE_ONBOARDING_DATA,
+      variables: {
+        input: {
+          clerkUserId: userId,
+          onboardingComplete: true,
+          whatsapp: details.whatsapp || undefined,
+          linkedinUrl: details.linkedinUrl || undefined,
+          currentRole: details.currentRole || undefined,
+        }
+      }
     });
 
     return { 

@@ -1,1 +1,92 @@
-{"buildCommand": "npx convex deploy --cmd 'npm run build'"}
+{
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".next",
+  "installCommand": "npm ci",
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    },
+    "src/app/api/graphql/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization, X-Clerk-User-Id"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/quiz",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/assessment",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/graphql",
+      "destination": "/api/graphql"
+    }
+  ],
+  "regions": ["iad1"],
+  "images": {
+    "sizes": [256, 640, 1080, 1920],
+    "localPatterns": [
+      {
+        "pathname": "/characters/**",
+        "search": ""
+      },
+      {
+        "pathname": "/public/**",
+        "search": ""
+      }
+    ],
+    "formats": ["image/webp"],
+    "qualities": [50, 75, 90],
+    "minimumCacheTTL": 2678400,
+    "dangerouslyAllowSVG": false,
+    "contentSecurityPolicy": "default-src 'self'; script-src 'none'; sandbox;",
+    "contentDispositionType": "inline"
+  }
+}

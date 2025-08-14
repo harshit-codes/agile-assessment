@@ -35,14 +35,25 @@ export default function CareerPathwaysSection({
           personalityType && (
             <div className="space-y-4">
               <div className="space-y-3">
-                {personalityType.careerPaths.map((path: string, index: number) => (
-                  <div key={index} className="flex items-start space-x-4 p-4 bg-primary/10 rounded-xl border border-primary/30">
-                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <BodyText size="small" className="font-bold text-primary">{index + 1}</BodyText>
+                {personalityType.careerPaths.map((path: string, index: number) => {
+                  // Use same color scheme as Trait Assessment cards
+                  const colors = [
+                    { bg: 'bg-blue-950/30', border: 'border-blue-800/30', number: 'bg-blue-600/20', text: 'text-blue-400' },
+                    { bg: 'bg-purple-950/30', border: 'border-purple-800/30', number: 'bg-purple-600/20', text: 'text-purple-400' },
+                    { bg: 'bg-orange-950/30', border: 'border-orange-800/30', number: 'bg-orange-600/20', text: 'text-orange-400' },
+                    { bg: 'bg-teal-950/30', border: 'border-teal-800/30', number: 'bg-teal-600/20', text: 'text-teal-400' }
+                  ];
+                  const colorScheme = colors[index % colors.length];
+                  
+                  return (
+                    <div key={index} className={`flex items-start space-x-4 p-4 ${colorScheme.bg} rounded-xl border ${colorScheme.border}`}>
+                      <div className={`w-8 h-8 rounded-lg ${colorScheme.number} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        <BodyText size="small" className={`font-bold ${colorScheme.text}`}>{index + 1}</BodyText>
+                      </div>
+                      <BodyText className="text-foreground font-medium leading-relaxed">{path}</BodyText>
                     </div>
-                    <BodyText className="text-foreground font-medium leading-relaxed">{path}</BodyText>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )

@@ -3,17 +3,15 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { useConvexQuiz } from "@/hooks/useConvexQuiz";
+import { useGraphQLQuiz } from "@/hooks/useGraphQLQuiz";
 import { useUserQuizStatus } from "@/hooks/useUserQuizStatus";
 import CompactQuizShell from "./CompactQuizShell";
 import QuizResults from "./QuizResults";
-import { Id } from "../../../../convex/_generated/dataModel";
-
 export default function QuizComponent() {
   const searchParams = useSearchParams();
-  const retakeFromSessionId = searchParams.get('retakeFrom') as Id<"quizSessions"> | null;
+  const retakeFromSessionId = searchParams.get('retakeFrom');
   
-  const quizState = useConvexQuiz(retakeFromSessionId);
+  const quizState = useGraphQLQuiz(retakeFromSessionId);
   const { quiz, showResults, assessmentResult, isLoading, error, sessionId } = quizState;
   const userQuizStatus = useUserQuizStatus();
   const { isLoaded: isUserLoaded } = useUser();
@@ -40,6 +38,7 @@ export default function QuizComponent() {
   // PRIORITY CHECK: If user has completed quiz, redirect immediately (unless explicitly retaking)
   // This must happen BEFORE loading checks to prevent getting stuck in loading state
   if (isUserLoaded && !userQuizStatus.isUserLoading && userQuizStatus.hasCompletedQuiz && userQuizStatus.latestResult && !retakeFromSessionId) {
+    console.log("🔄 QuizComponent: Showing results from userQuizStatus (user has completed quiz)")
     return <QuizResults assessmentResult={userQuizStatus.latestResult} quizState={quizState} mode="direct" />;
   }
 
@@ -78,7 +77,25 @@ export default function QuizComponent() {
   // Onboarding is now integrated within the quiz flow, no separate step needed
 
   if (showResults && assessmentResult) {
+    console.log("🎉 QuizComponent: Showing results from quiz state (showResults=true & assessmentResult exists)")
     return <QuizResults assessmentResult={assessmentResult} quizState={quizState} mode="direct" />;
+  }
+
+  if (showResults && !assessmentResult) {
+    console.log("⚠️ QuizComponent: showResults=true but no assessmentResult yet, showing loading state")
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold mb-2">
+            Processing Your Results...
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            We're calculating your personality profile and preparing your results.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return <CompactQuizShell quiz={quiz} quizState={quizState} />;

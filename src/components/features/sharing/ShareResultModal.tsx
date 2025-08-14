@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_USER_PROFILE, GET_SHARING_STATS, GET_SHAREABLE_URL, GET_PERSONALITY_TYPE_BY_SHORT_NAME } from "@/lib/graphql/operations";
+import { TOGGLE_RESULT_SHARING, LINK_RESULT_TO_USER } from "@/lib/graphql/operations";
 import { useUser } from "@clerk/nextjs";
 // TODO: Re-enable for private sharing in future version
 // import { generate } from "random-words";
@@ -26,12 +27,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { BodyText } from "@/components/ui/Typography";
-import { Id } from "../../../../convex/_generated/dataModel";
-
 interface ShareResultModalProps {
   isOpen: boolean;
   onClose: () => void;
-  sessionId: Id<"quizSessions">;
+  sessionId: string;
   personalityType?: {
     name: string;
     shortName: string;
@@ -55,8 +54,8 @@ export default function ShareResultModal({
   // const [accessCode, setAccessCode] = useState("");
 
   // Mutations
-  const toggleSharing = useMutation(api.sharing.toggleResultSharing);
-  const linkResultToUser = useMutation(api.sharing.linkResultToUser);
+  const [toggleSharing] = useMutation(TOGGLE_RESULT_SHARING);
+  const [linkResultToUser] = useMutation(LINK_RESULT_TO_USER);
   
   // TODO: Re-enable for future version with slug editing
   // const updateUserSlug = useMutation(api.userProfiles.updateUserSlug);
@@ -69,23 +68,27 @@ export default function ShareResultModal({
   // );
 
   // Queries
-  const userProfile = useQuery(
-    api.userProfiles.getUserProfile,
-    user?.id ? { clerkUserId: user.id } : "skip"
-  );
-  const sharingStats = useQuery(
-    api.sharing.getUserSharingStats,
-    user?.id ? { clerkUserId: user.id } : "skip"
-  );
-  const shareableUrl = useQuery(
-    api.sharing.getShareableUrl,
-    user?.id ? { sessionId, clerkUserId: user.id } : "skip"
-  );
-  const brandingConfig = useQuery(api.appConfig.getBrandingConfig);
-  const enhancedPersonality = useQuery(
-    api.quiz.getPersonalityTypeByShortName, 
-    personalityType?.shortName ? { shortName: personalityType.shortName } : "skip"
-  );
+  const { data: userProfileData } = useQuery(GET_USER_PROFILE, {
+    variables: { clerkUserId: user?.id || '' },
+    skip: !user?.id
+  });
+  const { data: sharingStatsData } = useQuery(GET_SHARING_STATS, {
+    variables: { clerkUserId: user?.id || '' },
+    skip: !user?.id
+  });
+  const { data: shareableUrlData } = useQuery(GET_SHAREABLE_URL, {
+    variables: { sessionId, clerkUserId: user?.id || '' },
+    skip: !user?.id
+  });
+  const { data: enhancedPersonalityData } = useQuery(GET_PERSONALITY_TYPE_BY_SHORT_NAME, {
+    variables: { shortName: personalityType?.shortName || '' },
+    skip: !personalityType?.shortName
+  });
+  
+  const userProfile = userProfileData?.getUserProfile;
+  const sharingStats = sharingStatsData?.getUserSharingStats;
+  const shareableUrl = shareableUrlData?.getShareableUrl;
+  const enhancedPersonality = enhancedPersonalityData?.getPersonalityTypeByShortName;
 
   // TODO: Re-enable for private sharing in future version
   // const generateRandomAccessCode = () => {
@@ -135,10 +138,12 @@ export default function ShareResultModal({
       
       if (email) {
         linkResultToUser({
-          sessionId,
-          clerkUserId: user.id,
-          email,
-          displayName,
+          variables: {
+            sessionId,
+            clerkUserId: user.id,
+            email,
+            displayName,
+          }
         }).catch(console.error);
       }
     }
@@ -154,13 +159,17 @@ export default function ShareResultModal({
 
     try {
       await toggleSharing({
-        sessionId,
-        clerkUserId: user.id,
-        email,
-        isPublic: true, // Always public in current version
-        displayName: user.fullName || user.firstName || undefined,
-        // TODO: Re-enable for private sharing
-        // passcode: accessCode.trim().length > 0 ? accessCode.trim() : undefined,
+        variables: {
+          input: {
+            sessionId,
+            clerkUserId: user.id,
+            email,
+            isPublic: true, // Always public in current version
+            displayName: user.fullName || user.firstName || undefined,
+            // TODO: Re-enable for private sharing
+            // passcode: accessCode.trim().length > 0 ? accessCode.trim() : undefined,
+          }
+        }
       });
     } catch (error) {
       console.error("Failed to update sharing:", error);
@@ -245,11 +254,14 @@ export default function ShareResultModal({
                   {/* Character Image */}
                   {enhancedPersonality?.characterImage && (
                     <div className="flex-shrink-0">
-                      <img 
+                      <Image 
                         src={enhancedPersonality.characterImage} 
                         alt={personalityType.name}
+                        width={192}
+                        height={192}
                         className="w-48 h-48 rounded-lg border-2 border-primary/30 shadow-lg"
                         style={{ imageRendering: 'pixelated' }}
+                        priority
                       />
                     </div>
                   )}

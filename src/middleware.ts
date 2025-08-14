@@ -24,6 +24,7 @@ export const config = {
      * - services (Terms of Service - public page)
      * - policy (Privacy Policy - public page)
      * - api/webhooks (webhook endpoints - exclude from Clerk middleware)
+     * - api/graphql (GraphQL endpoint - exclude from Clerk middleware)
      */
     '/((?!api|_next/static|_next/image|favicon.ico|results|services|policy).*)',
   ],

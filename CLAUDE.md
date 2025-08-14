@@ -8,9 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with Th
 # Development server
 npm run dev
 
-# Convex development server (run in parallel)
-npx convex dev
-
 # Build for production
 npm run build
 
@@ -26,43 +23,50 @@ npm run type-check
 # Bundle analysis
 npm run analyze
 
-# Seed Convex database
-npx convex run seedData:seedDatabase
+# Generate Prisma client
+npm run db:generate
 
-# Deploy to production (Convex + frontend)
-npx convex deploy --cmd 'npm run build'
+# Seed Prisma database
+npm run db:seed
+
+# Deploy to Vercel
+vercel --prod
+
+# Deploy with build optimizations
+npm run vercel-build
 ```
 
 ## Project Architecture
 
-This is a **Next.js 15** personality quiz application with **Convex.dev** backend, featuring a modern **16-personality system** built on **4 behavioral dimensions**, crafted with TypeScript and Tailwind CSS.
+This is a **Next.js 15** personality quiz application with **Prisma + PostgreSQL** backend and **GraphQL API**, featuring a modern **16-personality system** built on **4 behavioral dimensions**, crafted with TypeScript and Tailwind CSS.
 
 ### Core Architecture
 
-- **Convex Backend**: Real-time document-relational database with serverless functions
+- **Prisma + PostgreSQL**: Type-safe database with Prisma Accelerate for connection pooling
+- **GraphQL API**: Apollo Server with custom resolvers for quiz operations
 - **Compact Quiz Interface**: Streamlined single-page assessment for optimal completion rates
 - **4-Trait Assessment**: Work Style, Decision Process, Communication Style, Focus Orientation (32 total questions, 8 per section)
-- **Advanced Scoring**: Real-time calculation with balanced reverse scoring (-2 to +2 scale)  
+- **Advanced Scoring**: Server-side calculation with balanced reverse scoring (-2 to +2 scale)  
 - **Modern Results**: Professional personality breakdown with animated progress indicators
-- **Type Safety**: End-to-end TypeScript from Convex schema to React components
+- **Type Safety**: End-to-end TypeScript from Prisma schema to React components
 
 ### Key Components
 
-**Convex Schema** (`convex/schema.ts`):
+**Prisma Schema** (`prisma/schema.prisma`):
 - Modern 4-trait database structure: workStyle, decisionProcess, communicationStyle, focusOrientation
 - Type-safe schema with validation for 16-personality system
 - Optimized indexes for quiz sessions, responses, and personality matching
-- Real-time subscriptions for live progress tracking
+- Connection pooling with Prisma Accelerate for serverless environments
 
-**Convex Functions** (`convex/quiz.ts`, `convex/scoring.ts`):
+**GraphQL Resolvers** (`src/lib/graphql/resolvers/`):
 - Server-side quiz CRUD operations and session management
 - Advanced scoring calculations with reverse question handling
 - Automatic personality type matching and result persistence
 - Public result sharing with shareable URLs
 
-**State Management** (`src/hooks/useConvexQuiz.ts`):
-- Single source of truth for quiz state with Convex integration
-- Real-time queries and optimistic mutations
+**State Management** (`src/hooks/useGraphQLQuiz.ts`):
+- Single source of truth for quiz state with Apollo Client integration
+- Optimistic mutations and caching strategies
 - Progress tracking, error handling, and session persistence
 - Loading states and connection management
 
@@ -99,8 +103,10 @@ Uses `@/*` alias mapping to `./src/*` for clean, maintainable imports.
 - **Tailwind CSS**: Utility-first styling with custom CSS variables
 - **Class Variance Authority**: Systematic component variant management
 - **Tailwind Merge**: Intelligent conditional class merging
-- **Convex**: Backend-as-a-service with real-time capabilities
+- **Prisma**: Type-safe database toolkit with PostgreSQL
+- **Apollo GraphQL**: Server and client for API operations
 - **Clerk**: Optional authentication integration (not required for core functionality)
+- **Vercel**: Deployment platform optimized for Next.js
 
 ## Development Patterns
 
@@ -111,12 +117,12 @@ Uses `@/*` alias mapping to `./src/*` for clean, maintainable imports.
 - **Type Definitions**: Comprehensive interfaces for all data structures
 
 ### Quiz Assessment Flow
-1. **Session Creation**: Convex initializes quiz session with unique identifier
-2. **Real-time Loading**: Quiz structure and questions loaded from Convex database  
-3. **Progressive Answers**: Each response immediately persisted with optimistic UI updates
-4. **Live Progress**: Real-time completion tracking across all 4 sections
-5. **Server Scoring**: Advanced calculation with personality type matching via Convex functions
-6. **Result Storage**: Complete assessment data stored for analytics and sharing
+1. **Session Creation**: GraphQL mutation initializes quiz session with unique identifier
+2. **Database Loading**: Quiz structure and questions loaded from PostgreSQL via Prisma  
+3. **Progressive Answers**: Each response immediately persisted with GraphQL mutations
+4. **Progress Tracking**: Completion tracking across all 4 sections via Apollo Client
+5. **Server Scoring**: Advanced calculation with personality type matching via GraphQL resolvers
+6. **Result Storage**: Complete assessment data stored in PostgreSQL for analytics and sharing
 
 ### Styling Conventions
 - **Tailwind First**: Prefer utility classes over custom CSS
@@ -125,40 +131,40 @@ Uses `@/*` alias mapping to `./src/*` for clean, maintainable imports.
 - **Component Variants**: Systematic styling with `cva()` utility
 - **Animation**: Purposeful transitions enhancing user experience
 
-## Convex + Vercel Deployment
+## Prisma + Vercel Deployment
 
 ### Environment Variables Required
 
 **Production (.env.local for development)**:
-- `NEXT_PUBLIC_CONVEX_URL` - Auto-generated by `npx convex dev`
-- `CONVEX_DEPLOY_KEY` - Generate in Convex dashboard for production
+- `DATABASE_URL` - Prisma Accelerate connection string
+- `NEXT_PUBLIC_BASE_URL` - Domain URL for metadata and sharing
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk authentication (optional)
 - `CLERK_SECRET_KEY` - Clerk server-side authentication (optional)
-- `NEXT_PUBLIC_BASE_URL` - Domain URL for metadata and sharing
+- `NODE_ENV` - Environment (development/production)
 
 ### Deployment Commands
 
 ```bash
-# Local development (parallel terminals recommended)
+# Local development
 npm run dev
-npx convex dev
 
 # Database seeding (run once after setup)
-npx convex run seedData:seedDatabase
+npm run db:seed
 
-# Production deployment (single command)
-npx convex deploy --cmd 'npm run build'
+# Production build
+npm run vercel-build
 
-# Vercel deployment with Convex integration  
+# Vercel deployment
 vercel --prod
 ```
 
 ### Vercel Configuration
 
-1. **Build Command**: `npx convex deploy --cmd 'npm run build'`
-2. **Environment Variables**: Add all required variables in Vercel dashboard
-3. **Preview Deployments**: Convex automatically creates separate backends per branch
+1. **Build Command**: `npm run vercel-build` (includes Prisma generation)
+2. **Environment Variables**: Add DATABASE_URL, BASE_URL, and Clerk keys in Vercel dashboard
+3. **Preview Deployments**: Each branch uses same database (consider separate databases for isolation)
 4. **Domain Configuration**: Update `NEXT_PUBLIC_BASE_URL` for result sharing
+5. **Serverless Optimization**: GraphQL functions configured with 30s timeout
 
 ## Assessment Methodology
 
@@ -209,7 +215,7 @@ The assessment maps 4-trait combinations to 16 personality types:
 - **16-Personality System**: Expanded from 8 to 16 types with 4 behavioral dimensions
 - **32 Questions**: 8 questions per section with alternating reverse scoring
 - **Enhanced Scoring**: Server-side calculation with advanced trait matching
-- **Real-time Updates**: Convex provides live data synchronization
+- **Persistent Storage**: PostgreSQL with Prisma for reliable data persistence
 - **Shareable Results**: Public and private sharing with optional passcode protection
 
 ### Database Schema Evolution
@@ -242,5 +248,5 @@ The assessment maps 4-trait combinations to 16 personality types:
 **Performance Requirements**:
 - Optimize for Core Web Vitals and mobile performance
 - Minimize bundle size and implement code splitting where beneficial
-- Use Convex real-time features efficiently
+- Use GraphQL queries and mutations efficiently with proper caching
 - Implement proper loading and error states

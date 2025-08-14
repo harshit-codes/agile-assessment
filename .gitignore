@@ -64,3 +64,5 @@ debug-user.js
 
 # OS generated files
 Thumbs.db
+
+/generated/prisma

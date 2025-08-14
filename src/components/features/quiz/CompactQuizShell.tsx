@@ -2,19 +2,19 @@
 
 import { StandardCard, CardContent } from "@/components/ui/StandardCard";
 import { BodyText } from "@/components/ui/Typography";
-import { useConvexQuiz } from "@/hooks/useConvexQuiz";
+import { useGraphQLQuiz } from "@/hooks/useGraphQLQuiz";
 import HeaderSection from "@/components/header/HeaderSection";
 import CompactQuestionSection from "./CompactQuestionSection";
 import OnboardingQuestionSection from "./OnboardingQuestionSection";
 import UnifiedProgressBar from "./UnifiedProgressBar";
 
 interface CompactQuizShellProps {
-  quiz: any; // Using Convex quiz structure
-  quizState?: ReturnType<typeof useConvexQuiz>;
+  quiz: any; // Using GraphQL quiz structure
+  quizState?: ReturnType<typeof useGraphQLQuiz>;
 }
 
 export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellProps) {
-  const hookState = useConvexQuiz();
+  const hookState = useGraphQLQuiz();
   const state = quizState || hookState;
   
   

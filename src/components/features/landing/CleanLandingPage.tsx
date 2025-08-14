@@ -1,6 +1,6 @@
 "use client";
 
-import ChromaGrid from "./ChromaGrid";
+import dynamic from "next/dynamic";
 import { HeroText, BodyText, Caption } from "@/components/ui/Typography";
 import { GradientText } from "@/components/ui/GradientText";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,16 @@ import { RainbowButton } from "@/components/magicui/rainbow-button";
 import ShinyText from "@/components/ui/ShinyText";
 import { ArrowRight } from "lucide-react";
 import { SignInButton, useUser } from "@clerk/nextjs";
+
+// Dynamically import ChromaGrid to prevent SSR issues
+const ChromaGrid = dynamic(() => import("./ChromaGrid"), {
+  ssr: false,
+  loading: () => (
+    <div className="chroma-grid-loading" style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Loading personality types...</div>
+    </div>
+  ),
+});
 
 interface CleanLandingPageProps {
   className?: string;

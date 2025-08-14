@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { 
   Trophy, 
   Star, 
@@ -125,11 +126,14 @@ export default function MiniReportCard({ assessmentResult, quizState }: MiniRepo
                 <div className="relative inline-block mb-6">
                   {enhancedPersonality?.characterImage && (
                     <div className="relative">
-                      <img 
+                      <Image 
                         src={enhancedPersonality.characterImage} 
                         alt={personalityType.name}
+                        width={128}
+                        height={128}
                         className="w-32 h-32 rounded-2xl border border-primary/20 shadow-sm"
                         style={{ imageRendering: 'pixelated' }}
+                        priority
                       />
                     </div>
                   )}

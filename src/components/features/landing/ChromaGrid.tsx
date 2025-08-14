@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, memo, useMemo } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
-import { personalityTypes } from "@/data/personality-types";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_PERSONALITY_TYPES } from "@/lib/graphql/operations";
 import { H4, BodyText, Caption } from "@/components/ui/Typography";
 
 interface ChromaGridItem {
@@ -29,6 +31,26 @@ interface ChromaGridProps {
   onCardClick?: (item: ChromaGridItem, index: number) => void;
 }
 
+// Hardcoded image mapping for Vercel optimization
+const IMAGE_MAP: Record<string, string> = {
+  "SEDV": "/characters/SEDV.png",
+  "SEDP": "/characters/SEDP.png", 
+  "SEHV": "/characters/SEHV.png",
+  "SEHP": "/characters/SEHP.png",
+  "SIDV": "/characters/SIDV.png",
+  "SIDP": "/characters/SIDP.png",
+  "SIHV": "/characters/SIHV.png", 
+  "SIHP": "/characters/SIHP.png",
+  "DEDV": "/characters/DEDV.png",
+  "DEDP": "/characters/DEDP.png",
+  "DEHV": "/characters/DEHV.png",
+  "DEHP": "/characters/DEHP.png", 
+  "DIDV": "/characters/DIDV.png",
+  "DIDP": "/characters/DIDP.png",
+  "DIHV": "/characters/DIHV.png",
+  "DIHP": "/characters/DIHP.png"
+};
+
 export default function ChromaGrid({
   items,
   className = "",
@@ -46,18 +68,10 @@ export default function ChromaGrid({
   const setY = useRef<((value: any) => void) | null>(null);
   const pos = useRef({ x: 0, y: 0 });
 
-  // Convert personality types to ChromaGrid format
-  const data: ChromaGridItem[] = items || personalityTypes.map((personality) => ({
-    image: personality.characterImage,
-    emoji: personality.name.split(' ')[0],
-    title: personality.name.slice(3), // Remove emoji
-    subtitle: personality.shortName,
-    handle: personality.characterPersona || personality.description.slice(0, 60) + (personality.description.length > 60 ? '...' : ''),
-    borderColor: personality.borderColor || "#4F46E5",
-    gradient: personality.gradient || "linear-gradient(145deg, #4F46E5, #000)",
-    description: personality.description,
-  }));
+  // Fetch personality types from database
+  const { data: personalityData, loading, error } = useQuery(GET_ALL_PERSONALITY_TYPES);
 
+  // Always call useEffect to maintain hook order
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -128,6 +142,82 @@ export default function ChromaGrid({
     card.style.setProperty("--mouse-y", `${y}px`);
   };
 
+  // Convert personality types to ChromaGrid format
+  const data: ChromaGridItem[] = items || (personalityData?.getAllPersonalityTypes || []).map((personality: any) => ({
+    image: IMAGE_MAP[personality.shortName], // Use hardcoded image mapping for Vercel optimization
+    emoji: personality.name.split(' ')[0],
+    title: personality.name.slice(3), // Remove emoji
+    subtitle: personality.shortName,
+    handle: personality.characterAttributes?.join(', ') || personality.description.slice(0, 60) + (personality.description.length > 60 ? '...' : ''),
+    borderColor: "#4F46E5", // Default border color
+    gradient: "linear-gradient(145deg, #4F46E5, #000)", // Default gradient
+    description: personality.description,
+  }));
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className={`chroma-grid ${className}`} style={{ "--r": `${radius}px`, "--cols": columns, "--rows": rows } as React.CSSProperties}>
+        {Array.from({ length: 16 }).map((_, i) => (
+          <div key={i} className="chroma-card loading-skeleton">
+            <div className="skeleton-content">
+              <div className="skeleton-image"></div>
+              <div className="skeleton-text"></div>
+            </div>
+          </div>
+        ))}
+        <style jsx>{`
+          .loading-skeleton {
+            min-height: 320px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+          }
+          .skeleton-content {
+            text-align: center;
+          }
+          .skeleton-image {
+            width: 8rem;
+            height: 8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            margin: 0 auto 1rem;
+            animation: pulse 1.5s ease-in-out infinite;
+          }
+          .skeleton-text {
+            width: 6rem;
+            height: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            margin: 0 auto;
+            animation: pulse 1.5s ease-in-out infinite;
+          }
+          @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Error state - fallback to empty or show error message
+  if (error) {
+    console.error('Error fetching personality types:', error);
+    return (
+      <div className={`chroma-grid ${className}`} style={{ textAlign: 'center', padding: '2rem' }}>
+        <p style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          Unable to load personality types. Please try refreshing the page.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={rootRef}
@@ -159,7 +249,7 @@ export default function ChromaGrid({
             <div className="chroma-card-front">
               <div className="chroma-img-wrapper">
                 {item.image ? (
-                  <img src={item.image} alt={item.title} loading="lazy" className="chroma-character-img" />
+                  <Image src={item.image} alt={item.title} width={100} height={100} className="chroma-character-img" priority={false} />
                 ) : item.emoji ? (
                   <div className="chroma-emoji">
                     {item.emoji}
@@ -221,7 +311,7 @@ export default function ChromaGrid({
           perspective: 1000px;
           transition: all 0.3s ease;
           overflow: visible;
-          min-height: 280px;
+          min-height: 320px;
         }
 
         .chroma-card-inner {
@@ -482,6 +572,10 @@ export default function ChromaGrid({
             min-height: 85vh;
             padding: 3rem;
           }
+          
+          .chroma-card {
+            min-height: 320px;
+          }
         }
 
         /* Desktop/Large Tablet (1024px - 1199px) - 3 column grid */
@@ -492,6 +586,10 @@ export default function ChromaGrid({
             min-height: 85vh;
             gap: 1.75rem;
             padding: 2.75rem;
+          }
+          
+          .chroma-card {
+            min-height: 320px;
           }
         }
 
@@ -542,7 +640,7 @@ export default function ChromaGrid({
           }
           
           .chroma-card {
-            min-height: 250px;
+            min-height: 290px;
           }
         }
 
@@ -592,7 +690,7 @@ export default function ChromaGrid({
           }
           
           .chroma-card {
-            min-height: 220px;
+            min-height: 260px;
           }
         }
 
@@ -642,7 +740,7 @@ export default function ChromaGrid({
           }
           
           .chroma-card {
-            min-height: 200px;
+            min-height: 240px;
           }
         }
 
@@ -693,7 +791,7 @@ export default function ChromaGrid({
           }
           
           .chroma-card {
-            min-height: 180px;
+            min-height: 220px;
           }
         }
       `}</style>

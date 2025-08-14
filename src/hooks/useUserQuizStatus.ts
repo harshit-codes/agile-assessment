@@ -1,9 +1,8 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useQuery, useMutation } from "convex/react";
-import { useEffect } from "react";
-import { api } from "../../convex/_generated/api";
+import { useQuery } from "@apollo/client";
+import { GET_USER_LATEST_RESULT } from "../lib/graphql/operations";
 
 export interface UserQuizStatus {
   hasCompletedQuiz: boolean;
@@ -15,16 +14,19 @@ export interface UserQuizStatus {
 export function useUserQuizStatus(): UserQuizStatus {
   const { user, isLoaded: isUserLoaded } = useUser();
   
-  // Query user's latest quiz result using direct mapping lookup
-  const latestResult = useQuery(
-    api.quiz.getUserLatestQuizResult,
-    user?.id ? { clerkUserId: user.id } : "skip"
-  );
+  // Query user's latest quiz result using GraphQL
+  const { data, loading } = useQuery(GET_USER_LATEST_RESULT, {
+    variables: { clerkUserId: user?.id || '' },
+    skip: !user?.id,
+    errorPolicy: 'all'
+  });
+
+  const latestResult = data?.getUserLatestResult;
 
   return {
     hasCompletedQuiz: !!latestResult,
     latestResult: latestResult || null,
-    isLoading: latestResult === undefined,
+    isLoading: loading,
     isUserLoading: !isUserLoaded,
   };
 }
