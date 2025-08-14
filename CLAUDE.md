@@ -26,8 +26,16 @@ npm run analyze
 # Generate Prisma client
 npm run db:generate
 
+# Database migrations
+npm run db:migrate
+npm run db:push
+npm run db:migrate:deploy
+
 # Seed Prisma database
 npm run db:seed
+
+# Open Prisma Studio
+npm run db:studio
 
 # Deploy to Vercel
 vercel --prod
@@ -96,17 +104,17 @@ Uses `@/*` alias mapping to `./src/*` for clean, maintainable imports.
 
 ### Tech Stack Integration
 
-- **Next.js 15**: App Router with React 19 and server components
-- **TypeScript**: Strict mode with comprehensive type coverage
+- **Next.js 15**: App Router with React 19 and server components, standalone output mode
+- **TypeScript**: Strict mode with comprehensive type coverage and path aliases (`@/*` → `./src/*`)
 - **Radix UI**: Accessible primitives (Progress, Dialog, Button, etc.)
 - **Lucide React**: Consistent icon system with tree-shaking
 - **Tailwind CSS**: Utility-first styling with custom CSS variables
 - **Class Variance Authority**: Systematic component variant management
 - **Tailwind Merge**: Intelligent conditional class merging
-- **Prisma**: Type-safe database toolkit with PostgreSQL
-- **Apollo GraphQL**: Server and client for API operations
+- **Prisma**: Type-safe database toolkit with PostgreSQL and Accelerate connection pooling
+- **Apollo GraphQL**: Server and client for API operations with custom resolvers
 - **Clerk**: Optional authentication integration (not required for core functionality)
-- **Vercel**: Deployment platform optimized for Next.js
+- **Vercel**: Deployment platform with bundle analyzer and optimization
 
 ## Development Patterns
 
@@ -115,6 +123,8 @@ Uses `@/*` alias mapping to `./src/*` for clean, maintainable imports.
 - **Atomic Design**: Reusable UI components in `src/components/ui/`
 - **Custom Hooks**: Business logic abstracted to `src/hooks/`
 - **Type Definitions**: Comprehensive interfaces for all data structures
+- **GraphQL Integration**: Operations defined in `src/lib/graphql/operations.ts` with resolvers in `src/lib/graphql/resolvers/`
+- **State Management**: Apollo Client cache with optimistic mutations for real-time UX
 
 ### Quiz Assessment Flow
 1. **Session Creation**: GraphQL mutation initializes quiz session with unique identifier
@@ -232,6 +242,8 @@ The assessment maps 4-trait combinations to 16 personality types:
 - Maintain type safety across all new features
 - Follow the established file organization structure
 - Test quiz flow thoroughly after any scoring changes
+- Use `npm run db:studio` to inspect database changes during development
+- Bundle analysis with `npm run analyze` for performance optimization
 
 **Database Changes**:
 - Never modify the 4-trait schema without updating all dependent components
@@ -250,3 +262,5 @@ The assessment maps 4-trait combinations to 16 personality types:
 - Minimize bundle size and implement code splitting where beneficial
 - Use GraphQL queries and mutations efficiently with proper caching
 - Implement proper loading and error states
+- Build configuration optimizes for serverless with standalone output mode
+- WebVitals monitoring available in `src/components/monitoring/WebVitals.tsx`

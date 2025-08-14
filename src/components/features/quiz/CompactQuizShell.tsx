@@ -2,11 +2,13 @@
 
 import { StandardCard, CardContent } from "@/components/ui/StandardCard";
 import { BodyText } from "@/components/ui/Typography";
+import { Button } from "@/components/ui/button";
 import { useGraphQLQuiz } from "@/hooks/useGraphQLQuiz";
 import HeaderSection from "@/components/header/HeaderSection";
 import CompactQuestionSection from "./CompactQuestionSection";
 import OnboardingQuestionSection from "./OnboardingQuestionSection";
 import UnifiedProgressBar from "./UnifiedProgressBar";
+import { ChevronLeft, ChevronRight, User, CheckCircle } from "lucide-react";
 
 interface CompactQuizShellProps {
   quiz: any; // Using GraphQL quiz structure
@@ -107,46 +109,62 @@ export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellPr
           {/* Navigation */}
           <div className="mt-8 px-2 sm:px-0">
             <div className="flex items-center justify-between pt-6 border-t border-border/20">
-              <button
+              <Button
                 onClick={goToPreviousSection}
                 disabled={currentSectionIndex === -1}
-                className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-card border-2 border-border/50 hover:border-primary/50 hover:bg-card/80 text-foreground rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
+                variant="outline"
+                size="lg"
+                className="min-h-12 sm:min-h-14 px-6 sm:px-8"
               >
-                {currentSectionIndex === 0 ? "Onboarding" : "Previous"}
-              </button>
-              
-              <div className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground">
-                {currentSectionIndex === -1 ? (
-                  <span>Complete your profile</span>
+                {currentSectionIndex === 0 ? (
+                  <User className="size-5" />
                 ) : (
-                  <span>{sectionProgress.answered}/{sectionProgress.total} answered</span>
+                  <ChevronLeft className="size-5" />
                 )}
+              </Button>
+              
+              <div className="flex items-center justify-center px-4">
+                <div className="text-center">
+                  <div className="text-sm sm:text-base font-medium text-foreground">
+                    {currentSectionIndex === -1 ? (
+                      "Complete your profile"
+                    ) : (
+                      `${sectionProgress.answered}/${sectionProgress.total} answered`
+                    )}
+                  </div>
+                </div>
               </div>
               
               {currentSectionIndex === -1 ? (
-                <button
+                <Button
                   onClick={goToNextSection}
                   disabled={!isOnboardingValid}
-                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                  variant="default"
+                  size="lg"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8"
                 >
-                  Next
-                </button>
+                  <ChevronRight className="size-5" />
+                </Button>
               ) : currentSectionIndex === quiz.sections.length - 1 ? (
-                <button
+                <Button
                   onClick={completeQuiz}
                   disabled={overallProgress.percentage !== 100}
-                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-lg hover:from-primary/90 hover:to-primary/70 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold text-base sm:text-lg shadow-md hover:shadow-lg"
+                  variant="gradient"
+                  size="lg"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8"
                 >
-                  Complete Quiz
-                </button>
+                  <CheckCircle className="size-5" />
+                </Button>
               ) : (
-                <button
+                <Button
                   onClick={goToNextSection}
                   disabled={!sectionProgress.isComplete}
-                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                  variant="default"
+                  size="lg"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8"
                 >
-                  Next
-                </button>
+                  <ChevronRight className="size-5" />
+                </Button>
               )}
             </div>
           </div>
