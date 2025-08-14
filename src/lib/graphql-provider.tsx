@@ -16,9 +16,9 @@ export function GraphQLProvider({ children }: GraphQLProviderProps) {
   const { getToken, userId } = useAuth()
 
   const client = useMemo(() => {
-    // HTTP link for GraphQL endpoint
+    // HTTP link for GraphQL endpoint - use relative URL for production
     const httpLink = createHttpLink({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/api/graphql',
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || '/api/graphql',
     })
 
     // Auth link to add Clerk token to requests
