@@ -1,0 +1,362 @@
+# The Agile Assessment GraphQL Schema
+# Migrated from Convex backend
+
+scalar DateTime
+scalar JSON
+
+type Query {
+  # Quiz queries
+  getQuiz(title: String): Quiz
+  getQuizResult(sessionId: ID!): QuizResult
+  getUserLatestResult(clerkUserId: String!): QuizResult
+  getUserLatestQuizResult(clerkUserId: String!): QuizResult
+  getPublicResult(slug: String!, passcode: String): PublicResult
+  
+  # Session queries
+  getSessionResponses(sessionId: ID!): [QuizResponse!]!
+  getSessionResponsesForRetake(originalSessionId: ID!, currentQuizId: ID!): [QuizResponse!]!
+  getOnboardingDataForRetake(originalSessionId: ID!): OnboardingData
+  
+  # Personality queries
+  getAllPersonalityTypes: [PersonalityType!]!
+  getPersonalityTypeByTraits(
+    workStyle: WorkStyleTrait!
+    decisionProcess: DecisionProcessTrait!
+    communicationStyle: CommunicationStyleTrait!
+    focusOrientation: FocusOrientationTrait!
+  ): PersonalityType
+  getPersonalityTypeByShortName(shortName: String!): PersonalityType
+  
+  # User profile queries
+  getUserProfile(clerkUserId: String!): UserProfile
+  getUserProfileBySlug(slug: String!): UserProfile
+  checkSlugAvailability(slug: String!, excludeUserId: String): SlugAvailability!
+  getUserSharingStats(clerkUserId: String!): SharingStats!
+  getShareableUrl(sessionId: ID!, clerkUserId: String!): ShareableUrl
+  
+  # Sharing queries
+  validatePasscode(slug: String!, passcode: String!): PasscodeValidation!
+}
+
+type Mutation {
+  # Quiz session management
+  startQuizSession(input: StartQuizSessionInput!): QuizSessionResult!
+  submitResponse(input: SubmitResponseInput!): SubmitResponseResult!
+  completeQuizSession(sessionId: ID!): Boolean!
+  
+  # Results calculation
+  calculateAssessmentResult(sessionId: ID!): AssessmentResult!
+  
+  # User profile management
+  updateOnboardingData(input: OnboardingDataInput!): UserProfile!
+  updateUserSlug(input: UpdateUserSlugInput!): UserProfile!
+  updateDisplayName(input: UpdateDisplayNameInput!): UserProfile!
+  
+  # Sharing management
+  toggleResultSharing(input: ToggleSharingInput!): SharingResult!
+  linkResultToUser(input: LinkResultInput!): UserProfile!
+  
+  # Contact info
+  saveContactInfo(input: SaveContactInput!): Boolean!
+}
+
+type Subscription {
+  # Real-time quiz progress
+  quizProgress(sessionId: ID!): ProgressUpdate!
+}
+
+# Input types
+input StartQuizSessionInput {
+  quizTitle: String
+  ipAddress: String
+  userAgent: String
+  clerkUserId: String
+}
+
+input SubmitResponseInput {
+  sessionId: ID!
+  questionId: ID!
+  responseValue: Int!
+}
+
+input OnboardingDataInput {
+  clerkUserId: String!
+  onboardingData: OnboardingDataFields!
+}
+
+input OnboardingDataFields {
+  onboardingComplete: Boolean!
+  whatsapp: String
+  linkedinUrl: String
+  currentRole: String
+}
+
+input UpdateUserSlugInput {
+  clerkUserId: String!
+  newSlug: String!
+}
+
+input UpdateDisplayNameInput {
+  clerkUserId: String!
+  displayName: String!
+}
+
+input ToggleSharingInput {
+  sessionId: ID!
+  clerkUserId: String!
+  email: String!
+  isPublic: Boolean!
+  displayName: String
+  passcode: String
+}
+
+input LinkResultInput {
+  sessionId: ID!
+  clerkUserId: String!
+  email: String!
+  displayName: String
+}
+
+input SaveContactInput {
+  sessionId: ID!
+  email: String
+  name: String
+}
+
+# Core Types
+type Quiz {
+  id: ID!
+  title: String!
+  description: String!
+  timeLimit: Int
+  version: Int!
+  sections: [QuizSection!]!
+}
+
+type QuizSection {
+  id: ID!
+  title: String!
+  description: String!
+  polarTraits: PolarTraits!
+  statements: [Question!]!
+  displayOrder: Int!
+  valueLine: String!
+}
+
+type PolarTraits {
+  left: String!
+  right: String!
+}
+
+type Question {
+  id: ID!
+  statement: String!
+  isReversed: Boolean!
+  displayOrder: Int!
+  valueLine: String!
+}
+
+type PersonalityType {
+  id: ID!
+  name: String!
+  shortName: String!
+  description: String!
+  motto: String
+  tagline: String
+  punchline: String
+  characterImage: String
+  characterAttributes: [String!]!
+  detailedDescription: String
+  traits: PersonalityTraits!
+  strengths: [String!]!
+  challenges: [String!]!
+  careerPaths: [String!]!
+}
+
+type PersonalityTraits {
+  workStyle: WorkStyleTrait!
+  decisionProcess: DecisionProcessTrait!
+  communicationStyle: CommunicationStyleTrait
+  focusOrientation: FocusOrientationTrait
+  teamInteraction: TeamInteractionTrait
+}
+
+type ScrumRoleMatch {
+  primary: String!
+  secondary: [String!]!
+  fitPercentage: Float!
+}
+
+type QuizSession {
+  id: ID!
+  quizId: ID!
+  startedAt: DateTime!
+  completedAt: DateTime
+  clerkUserId: String
+}
+
+type QuizResponse {
+  id: ID!
+  sessionId: ID!
+  questionId: ID!
+  responseValue: Int!
+}
+
+type QuizResult {
+  id: ID!
+  sessionId: ID!
+  personalityType: PersonalityType
+  personalityCode: String
+  sectionScores: JSON!
+  traitScores: JSON!
+  traits: JSON! # For frontend compatibility
+  confidence: Float
+  overallFitScore: Float!
+  overallFit: Float! # For frontend compatibility
+  calculatedAt: DateTime!
+  isPublic: Boolean!
+  sharedAt: DateTime
+  hasPasscode: Boolean!
+}
+
+type UserProfile {
+  id: ID!
+  clerkUserId: String!
+  email: String!
+  slug: String!
+  displayName: String
+  onboardingComplete: Boolean!
+  name: String
+  whatsapp: String
+  linkedinUrl: String
+  currentRole: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserQuizResult {
+  id: ID!
+  clerkUserId: String!
+  latestResultId: ID!
+  updatedAt: DateTime!
+}
+
+# Result types
+type QuizSessionResult {
+  sessionId: ID!
+  quizId: ID!
+  clerkUserId: String
+}
+
+type SubmitResponseResult {
+  success: Boolean!
+  progress: ProgressInfo!
+}
+
+type ProgressInfo {
+  answered: Int!
+  total: Int!
+  percentage: Int!
+}
+
+type AssessmentResult {
+  resultId: ID!
+  scores: JSON!
+  traits: JSON!
+  personalityType: PersonalityType
+  personalityCode: String!
+  confidence: Float!
+  overallFit: Float!
+  sessionId: ID!
+  calculatedAt: DateTime!
+}
+
+type PublicResult {
+  userProfile: PublicUserProfile
+  result: QuizResult
+  isViewerOwner: Boolean!
+  requiresPasscode: Boolean
+  hasPasscode: Boolean
+  invalidPasscode: Boolean
+}
+
+type PublicUserProfile {
+  slug: String!
+  displayName: String!
+  createdAt: DateTime!
+  clerkUserId: String # Only included if viewer is owner
+}
+
+type OnboardingData {
+  whatsapp: String!
+  linkedinUrl: String!
+  currentRole: String!
+}
+
+type SlugAvailability {
+  available: Boolean!
+  reason: String!
+}
+
+type SharingStats {
+  hasProfile: Boolean!
+  slug: String
+  totalResults: Int!
+  publicResults: Int!
+  shareUrl: String
+  lastSharedAt: DateTime
+}
+
+type ShareableUrl {
+  shareUrl: String
+  slug: String
+  isPublic: Boolean!
+  sharedAt: DateTime
+}
+
+type SharingResult {
+  success: Boolean!
+  isPublic: Boolean!
+  shareUrl: String
+}
+
+type PasscodeValidation {
+  valid: Boolean!
+  reason: String!
+}
+
+type ProgressUpdate {
+  sessionId: ID!
+  answered: Int!
+  total: Int!
+  percentage: Int!
+  completedSections: [String!]!
+}
+
+# Enums
+enum WorkStyleTrait {
+  structured
+  dynamic
+  adaptive
+}
+
+enum DecisionProcessTrait {
+  evidence_based
+  intuitive
+  analytical
+}
+
+enum CommunicationStyleTrait {
+  direct
+  harmonizing
+}
+
+enum FocusOrientationTrait {
+  visionary
+  people_centered
+}
+
+enum TeamInteractionTrait {
+  collaborative
+  individual
+}

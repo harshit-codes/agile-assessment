@@ -1,0 +1,272 @@
+// This is your Prisma schema file for The Agile Assessment
+// Migrated from Convex backend to PostgreSQL with Prisma Accelerate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core quiz definitions
+model Quiz {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  timeLimit   Int?
+  version     Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Relations
+  sections    QuizSection[]
+  questions   Question[]
+  sessions    QuizSession[]
+
+  @@map("quizzes")
+}
+
+// Quiz sections (4 sections: work-style, decision-process, communication-style, focus-orientation)
+model QuizSection {
+  id           String     @id @default(cuid())
+  quizId       String
+  quiz         Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  leftTrait    String
+  rightTrait   String
+  displayOrder Int
+  valueLine    String     // workStyle, decisionProcess, communicationStyle, focusOrientation
+  createdAt    DateTime   @default(now())
+  
+  // Relations
+  questions    Question[]
+
+  @@index([quizId])
+  @@map("quiz_sections")
+}
+
+// Questions (32 questions total, 8 per section)
+model Question {
+  id           String         @id @default(cuid())
+  quizId       String
+  quiz         Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  sectionId    String
+  section      QuizSection    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  statement    String
+  displayOrder Int
+  isReversed   Boolean
+  valueLine    String         // workStyle, decisionProcess, communicationStyle, focusOrientation
+  createdAt    DateTime       @default(now())
+  
+  // Relations
+  responses    QuizResponse[]
+
+  @@index([quizId])
+  @@index([sectionId])
+  @@map("questions")
+}
+
+// Personality types (16 personality types - 4 dimension system)
+// Personality types (16 personality types - 4 dimension system)
+model PersonalityType {
+  id                  String        @id @default(cuid())
+  name                String
+  shortName           String        @unique
+  description         String
+  motto               String?
+  tagline             String?
+  punchline           String?
+  characterImage      String?
+  characterAttributes String[]
+  
+  // Trait combinations (flattened from traits object)
+  workStyle           String        // structured, dynamic
+  decisionProcess     String        // evidence-based, intuitive
+  communicationStyle  String?       // direct, harmonizing
+  focusOrientation    String?       // visionary, people-centered
+  teamInteraction     String?       // legacy field
+  
+  // Professional attributes
+  strengths           String[]
+  challenges          String[]
+  careerPaths         String[]
+  
+  // Additional fields (preserved from current schema)
+  detailedDescription String?
+  workStyleDetails    String[]
+  teamRole            String[]
+  idealEnvironment    String[]
+  
+  // Scrum role matching
+  scrumRolePrimary    String?
+  scrumRoleSecondary  String[]
+  scrumRoleFit        Float?
+  
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  
+  // Relations
+  results             QuizResult[]
+
+  @@map("personality_types")
+}
+
+
+model ScrumRole {
+  id                 String   @id @default(cuid())
+  title              String
+  description        String
+  responsibilities   String[]
+  
+  // Ideal trait combinations
+  idealWorkStyle         String?  // structured, dynamic
+  idealDecisionProcess   String?  // evidence-based, intuitive
+  idealCommunicationStyle String? // direct, harmonizing
+  idealFocusOrientation  String?  // visionary, people-centered
+  
+  challenges         String[]
+  successMetrics     String[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("scrum_roles")
+}
+
+// Quiz sessions - tracks user quiz attempts
+model QuizSession {
+  id          String         @id @default(cuid())
+  quizId      String
+  quiz        Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  startedAt   DateTime       @default(now())
+  completedAt DateTime?
+  ipAddress   String?
+  userAgent   String?
+  clerkUserId String?        // Track which authenticated user created this session
+  
+  // Relations
+  responses   QuizResponse[]
+  results     QuizResult[]
+  savedResults SavedResult[]
+
+  @@index([quizId])
+  @@index([clerkUserId])
+  @@map("quiz_sessions")
+}
+
+// Individual question responses
+model QuizResponse {
+  id            String      @id @default(cuid())
+  sessionId     String
+  session       QuizSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionId    String
+  question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  responseValue Int         // -2 to +2 Likert scale with lenient scoring
+  createdAt     DateTime    @default(now())
+
+  @@index([sessionId])
+  @@index([questionId])
+  @@unique([sessionId, questionId]) // Prevent duplicate responses
+  @@map("quiz_responses")
+}
+
+// Quiz results - calculated results with personality match
+model QuizResult {
+  id                String           @id @default(cuid())
+  sessionId         String
+  session           QuizSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userProfileId     String?
+  userProfile       UserProfile?     @relation(fields: [userProfileId], references: [id], onDelete: SetNull)
+  personalityTypeId String?
+  personalityType   PersonalityType? @relation(fields: [personalityTypeId], references: [id], onDelete: SetNull)
+  personalityCode   String?          // e.g., "SEDV", "DIHP"
+  
+  // Scores stored as JSON
+  sectionScores     Json             // { workStyle: number, decisionProcess: number, ... }
+  traitScores       Json             // Detailed trait results with labels
+  
+  confidence        Float?           // 0-100 confidence score
+  overallFitScore   Float            // 0-100
+  calculatedAt      DateTime         @default(now())
+  
+  // Sharing fields
+  isPublic          Boolean          @default(false)
+  sharedAt          DateTime?
+  passcode          String?          // Hashed passcode for private sharing
+  hasPasscode       Boolean          @default(false)
+
+  @@index([sessionId])
+  @@index([userProfileId])
+  @@index([isPublic])
+  @@map("quiz_results")
+}
+
+// Direct mapping of users to their latest quiz results - ensures reliable lookups
+model UserQuizResult {
+  id             String      @id @default(cuid())
+  clerkUserId    String      @unique
+  userProfile    UserProfile @relation(fields: [clerkUserId], references: [clerkUserId], onDelete: Cascade)
+  latestResultId String      // Direct reference to the user's most recent result
+  updatedAt      DateTime    @updatedAt
+
+  @@index([clerkUserId])
+  @@map("user_quiz_results")
+}
+
+// User profiles - for sharing and personalization
+model UserProfile {
+  id                 String           @id @default(cuid())
+  clerkUserId        String           @unique
+  email              String
+  slug               String           @unique
+  displayName        String?
+  
+  // Onboarding data
+  onboardingComplete Boolean          @default(false)
+  name               String?
+  whatsapp           String?
+  linkedinUrl        String?
+  currentRole        String?
+  
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  
+  // Relations
+  results            QuizResult[]
+  latestResults      UserQuizResult[]
+
+  @@index([clerkUserId])
+  @@index([slug])
+  @@index([email])
+  @@index([onboardingComplete])
+  @@map("user_profiles")
+}
+
+// Saved results - optional contact info for follow-ups
+model SavedResult {
+  id        String      @id @default(cuid())
+  sessionId String
+  session   QuizSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  email     String?
+  name      String?
+  savedAt   DateTime    @default(now())
+
+  @@index([sessionId])
+  @@map("saved_results")
+}
+
+// Application configuration - branding, URLs, etc.
+model AppConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  category    String   // e.g., "branding", "urls", "features"
+  description String?
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+  @@index([category])
+  @@map("app_config")
+}

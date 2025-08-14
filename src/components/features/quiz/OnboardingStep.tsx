@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, memo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useUser, UserButton } from '@clerk/nextjs';
 import { ArrowRight, CheckCircle } from "lucide-react";
 import HeaderSection from "@/components/header/HeaderSection";
+import { useUserFlowDebugger } from '@/hooks/useUserFlowDebugger';
 
 export interface UserDetails {
   whatsapp?: string;
@@ -19,10 +20,13 @@ interface UserDetailsStepProps {
   onComplete: (details: UserDetails) => void;
 }
 
-export default function OnboardingStep({ onComplete }: UserDetailsStepProps) {
+const OnboardingStep = memo(function OnboardingStep({ onComplete }: UserDetailsStepProps) {
   const { user } = useUser();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [validFields, setValidFields] = useState<Record<string, boolean>>({});
+  
+  // Initialize user flow debugging
+  const { trackOnboardingStep, trackInteraction, trackError } = useUserFlowDebugger('onboarding');
   
   const [formData, setFormData] = useState<UserDetails>({
     whatsapp: '',
@@ -30,7 +34,23 @@ export default function OnboardingStep({ onComplete }: UserDetailsStepProps) {
     currentRole: '',
   });
 
+  // Track component mount and user state
+  useEffect(() => {
+    trackOnboardingStep('Onboarding step loaded', {
+      userEmail: user?.emailAddresses?.[0]?.emailAddress,
+      userName: user?.firstName || user?.fullName,
+      hasUser: !!user
+    });
+  }, [user, trackOnboardingStep]);
+
   const updateFormData = (field: keyof UserDetails, value: string) => {
+    // Track user interaction
+    trackInteraction(`${field}-input`, 'field_update', { 
+      field, 
+      hasValue: !!value,
+      valueLength: value.length 
+    });
+    
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear errors for updated field
     setErrors(prev => {
@@ -114,8 +134,18 @@ export default function OnboardingStep({ onComplete }: UserDetailsStepProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    trackInteraction('onboarding-form', 'submit_attempt', {
+      hasWhatsapp: !!formData.whatsapp,
+      hasLinkedin: !!formData.linkedinUrl,
+      hasCurrentRole: !!formData.currentRole,
+      totalFieldsFilled: [formData.whatsapp, formData.linkedinUrl, formData.currentRole].filter(Boolean).length
+    });
+    
     if (validateForm()) {
+      trackOnboardingStep('Form validation successful', formData);
       onComplete(formData);
+    } else {
+      trackOnboardingStep('Form validation failed', { errors });
     }
   };
 
@@ -263,4 +293,6 @@ export default function OnboardingStep({ onComplete }: UserDetailsStepProps) {
       </div>
     </div>
   );
-}
+});
+
+export default OnboardingStep;
