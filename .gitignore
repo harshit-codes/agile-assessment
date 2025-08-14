@@ -66,3 +66,5 @@ debug-user.js
 Thumbs.db
 
 /generated/prisma
+.env
+.env.local
