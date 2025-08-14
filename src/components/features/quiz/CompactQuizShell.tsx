@@ -110,7 +110,7 @@ export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellPr
               <button
                 onClick={goToPreviousSection}
                 disabled={currentSectionIndex === -1}
-                className="min-h-11 px-4 py-2 sm:py-3 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-card border-2 border-border/50 hover:border-primary/50 hover:bg-card/80 text-foreground rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 {currentSectionIndex === 0 ? "Onboarding" : "Previous"}
               </button>
@@ -127,7 +127,7 @@ export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellPr
                 <button
                   onClick={goToNextSection}
                   disabled={!isOnboardingValid}
-                  className="min-h-11 px-4 py-2 sm:py-3 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   Next
                 </button>
@@ -135,7 +135,7 @@ export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellPr
                 <button
                   onClick={completeQuiz}
                   disabled={overallProgress.percentage !== 100}
-                  className="min-h-11 px-4 sm:px-6 py-2 sm:py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-lg hover:from-primary/90 hover:to-primary/70 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold text-base sm:text-lg shadow-md hover:shadow-lg"
                 >
                   Complete Quiz
                 </button>
@@ -143,7 +143,7 @@ export default function CompactQuizShell({ quiz, quizState }: CompactQuizShellPr
                 <button
                   onClick={goToNextSection}
                   disabled={!sectionProgress.isComplete}
-                  className="min-h-11 px-4 py-2 sm:py-3 text-sm font-medium text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="min-h-12 sm:min-h-14 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   Next
                 </button>

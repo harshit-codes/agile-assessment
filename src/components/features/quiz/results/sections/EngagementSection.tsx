@@ -60,10 +60,11 @@ export default function EngagementSection({
                 rel="noopener noreferrer"
                 className="w-full"
               >
-                <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-lg" size="lg">
+                <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-base sm:text-lg" size="lg">
                   <span className="flex items-center justify-center font-medium text-foreground">
-                    <Calendar className="mr-3 h-6 w-6" />
-                    Book Expert Consultation
+                    <Calendar className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+                    <span className="hidden sm:inline">Book Expert Consultation</span>
+                    <span className="sm:hidden">Book Consultation</span>
                   </span>
                 </Button>
               </a>
@@ -116,9 +117,10 @@ export default function EngagementSection({
               >
                 <RainbowButton size="lg" className="w-full py-6 h-auto text-lg group transition-all duration-300 hover:scale-105">
                   <span className="flex items-center justify-center font-semibold">
-                    <Calendar className="mr-3 h-6 w-6" />
-                    Book Career Consultation
-                    <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform duration-300" />
+                    <Calendar className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+                    <span className="hidden sm:inline">Book Career Consultation</span>
+                    <span className="sm:hidden">Book Consultation</span>
+                    <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-1 transition-transform duration-300" />
                   </span>
                 </RainbowButton>
               </a>
@@ -153,10 +155,11 @@ export default function EngagementSection({
                 rel="noopener noreferrer"
                 className="w-full"
               >
-                <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-lg" size="lg">
+                <Button variant="outline" className="w-full py-6 h-auto border-2 border-primary/30 hover:border-primary hover:bg-primary/5 text-base sm:text-lg" size="lg">
                   <span className="flex items-center justify-center font-medium text-foreground">
-                    <Calendar className="mr-3 h-6 w-6" />
-                    Book Expert Consultation
+                    <Calendar className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+                    <span className="hidden sm:inline">Book Expert Consultation</span>
+                    <span className="sm:hidden">Book Consultation</span>
                   </span>
                 </Button>
               </a>

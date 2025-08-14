@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import QuizResults from "@/components/features/quiz/QuizResults";
 import { getPersonalityByCode, personalityTypes } from "@/data/personality-types";
 import StructuredData from "@/components/seo/StructuredData";
+import serverClient from "@/lib/apollo-server";
+import { GET_PUBLIC_RESULT } from "@/lib/graphql/operations";
 
 interface PublicResultProps {
   params: Promise<{
@@ -27,6 +29,25 @@ export async function generateMetadata({
       const typeCode = personalityMatch[1].toUpperCase();
       personalityType = getPersonalityByCode(typeCode);
       displayName = slug.replace(/-[A-Z]{4}$/i, '').replace(/-/g, ' ');
+    }
+
+    // Fetch real user data from GraphQL to get actual display name
+    try {
+      const { data } = await serverClient.query({
+        query: GET_PUBLIC_RESULT,
+        variables: { slug },
+      });
+      
+      const sharedResult = data?.getPublicResult;
+      if (sharedResult?.userProfile?.displayName) {
+        displayName = sharedResult.userProfile.displayName;
+        console.log(`[Metadata] Using real display name: ${displayName} for slug: ${slug}`);
+      } else {
+        console.log(`[Metadata] No user profile found, using parsed slug: ${displayName}`);
+      }
+    } catch (apolloError) {
+      console.warn(`[Metadata] Failed to fetch user profile for slug ${slug}:`, apolloError);
+      // Keep using the parsed displayName as fallback
     }
 
     if (personalityType) {
