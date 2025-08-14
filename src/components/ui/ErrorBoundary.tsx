@@ -27,7 +27,25 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error('🔥 ErrorBoundary caught an error:', error, errorInfo);
+    console.error('🔥 Error stack:', error.stack);
+    console.error('🔥 Component stack:', errorInfo.componentStack);
+    
+    // Store error details for debugging
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem('lastError', JSON.stringify({
+        error: {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        },
+        errorInfo: {
+          componentStack: errorInfo.componentStack
+        },
+        timestamp: new Date().toISOString(),
+        url: window.location.href
+      }));
+    }
   }
 
   render() {
@@ -48,10 +66,29 @@ class ErrorBoundary extends Component<Props, State> {
               
               <H2 className="mb-4">Something went wrong</H2>
               
-              <BodyText variant="secondary" className="mb-6">
+              <BodyText variant="secondary" className="mb-4">
                 We encountered an unexpected error while loading your assessment. 
                 Don't worry - your progress has been saved.
               </BodyText>
+              
+              {process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ? (
+                <details className="mb-4 text-left">
+                  <summary className="cursor-pointer text-sm text-muted-foreground mb-2">
+                    🔍 Error Details (for debugging)
+                  </summary>
+                  <div className="bg-destructive/5 p-3 rounded border text-xs font-mono text-left">
+                    <div><strong>Error:</strong> {this.state.error?.name || 'Unknown'}</div>
+                    <div><strong>Message:</strong> {this.state.error?.message || 'No message'}</div>
+                    <div><strong>Time:</strong> {new Date().toISOString()}</div>
+                    {this.state.error?.stack && (
+                      <div>
+                        <strong>Stack:</strong>
+                        <pre className="mt-1 whitespace-pre-wrap text-xs">{this.state.error.stack}</pre>
+                      </div>
+                    )}
+                  </div>
+                </details>
+              ) : null}
 
               <div className="space-y-2">
                 <Button

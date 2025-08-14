@@ -1,4 +1,5 @@
 import HomePageClient from "./HomePageClient";
+import SimpleHomePageClient from "./SimpleHomePageClient";
 
 
 interface PageProps {
@@ -41,6 +42,13 @@ export default async function HomePage({ params, searchParams }: PageProps) {
   // Extract retakeFrom parameter for client component
   const retakeFromSessionId = resolvedSearchParams.retakeFrom || null;
 
+  // Use simplified client for debugging if test parameter is present
+  if (resolvedSearchParams.test !== 'full') {
+    console.log("🔧 Using SimpleHomePageClient for debugging");
+    return <SimpleHomePageClient />;
+  }
+
   // Return the client component for root route with extracted params
+  console.log("🔧 Using full HomePageClient");
   return <HomePageClient retakeFromSessionId={retakeFromSessionId} />;
 }

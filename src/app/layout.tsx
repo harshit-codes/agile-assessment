@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs';
 import { GraphQLProvider } from "@/lib/graphql-provider";
+import SimpleGraphQLProvider from "@/lib/SimpleGraphQLProvider";
 import Footer from "@/components/layout/Footer";
 import WebVitals from "@/components/monitoring/WebVitals";
 import ProductionDebugger from "@/components/debug/ProductionDebugger";
@@ -126,6 +127,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Always use GraphQLProvider in production layout
+  // Individual pages can choose their own provider logic
+  
   return (
     <ClerkProvider
       signInUrl="/sign-in"
@@ -156,6 +160,7 @@ export default function RootLayout({
             __html: `
               console.log("🔍 Layout - 1. Layout script executing");
               console.log("🔍 Layout - 2. Window location:", window.location.href);
+              console.log("🔍 Layout - 2a. Using provider:", "GraphQLProvider");
               
               // Environment variable client-side verification
               console.log("🔍 Layout - 4a. Client-side process.env check:", typeof window !== 'undefined' ? 'browser environment' : 'server environment');
