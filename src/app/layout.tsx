@@ -78,10 +78,10 @@ export const metadata: Metadata = {
     siteName: "The Agile Assessment",
     images: [
       {
-        url: "/api/og/personality-report?name=The%20Agile%20Assessment&shortName=QUIZ&description=Discover%20your%20ideal%20Scrum%20team%20role&characteristics=Comprehensive,4-Dimensional,Career-Focused,Team-Oriented&motto=Find%20Your%20Perfect%20Agile%20Role",
+        url: "/api/og",
         width: 1200,
         height: 630,
-        alt: "The Agile Assessment - Discover Your Perfect Agile Role",
+        alt: "The Agile Assessment - 16 Unique Agile Personalities",
         type: "image/png"
       }
     ]
@@ -93,8 +93,8 @@ export const metadata: Metadata = {
     title: "The Agile Assessment - Find Your Perfect Agile Role",
     description: "Discover your ideal Scrum team role with our comprehensive 4-dimensional personality assessment. Map your unique behavioral traits to 16 distinct personality types.",
     images: {
-      url: "/api/og/personality-report?name=The%20Agile%20Assessment&shortName=QUIZ&description=Discover%20your%20ideal%20Scrum%20team%20role&characteristics=Comprehensive,4-Dimensional,Career-Focused,Team-Oriented&motto=Find%20Your%20Perfect%20Agile%20Role",
-      alt: "The Agile Assessment - Find Your Perfect Agile Role"
+      url: "/api/og",
+      alt: "The Agile Assessment - 16 Unique Agile Personalities"
     }
   },
   icons: {
