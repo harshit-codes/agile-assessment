@@ -50,17 +50,40 @@ const server = new ApolloServer<Context>({
   ],
   // Format errors for client
   formatError: (error) => {
-    // In production, sanitize error messages
+    // Enhanced error logging for production debugging
+    console.error('GraphQL Error Details:', {
+      message: error.message,
+      path: error.path,
+      locations: error.locations,
+      extensions: error.extensions,
+      stack: error.stack,
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV
+    });
+
+    // In production, provide more helpful error messages while maintaining security
     if (process.env.NODE_ENV === 'production') {
-      // Don't expose internal error details
+      // Handle specific error types with user-friendly messages
       if (error.message.includes('Prisma') || error.message.includes('Database')) {
-        return new Error('An internal server error occurred');
+        console.error('Database Error:', error.message);
+        return new Error('Database connection issue - please try again');
       }
-      // Keep validation and expected errors
-      if (error.message.includes('not found') || error.message.includes('Invalid')) {
+      if (error.message.includes('Clerk') || error.message.includes('Authentication')) {
+        console.error('Auth Error:', error.message);
+        return new Error('Authentication error - please sign in again');
+      }
+      if (error.message.includes('not found')) {
+        return error; // These are safe to expose
+      }
+      if (error.message.includes('Invalid') || error.message.includes('required')) {
+        return error; // Validation errors are safe
+      }
+      // For debugging: return more context in development-like format
+      if (process.env.ENABLE_DETAILED_ERRORS === 'true') {
         return error;
       }
       // Generic error for unexpected issues
+      console.error('Unhandled GraphQL Error:', error.message);
       return new Error('An error occurred while processing your request');
     }
     // In development, show full errors

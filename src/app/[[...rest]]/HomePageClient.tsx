@@ -70,9 +70,23 @@ export default function HomePageClient({ retakeFromSessionId }: HomePageClientPr
     console.log("🔍 Page - Client - 1a. HomePageClient rendering");
     console.log("🔍 Page - Client - 1b. retakeFromSessionId:", retakeFromSessionId);
     console.log("🔍 Page - Client - 1c. Clerk state:", { isSignedIn, isLoaded });
+    
+    // Additional validation for authentication state
+    if (user.error) {
+      console.error("🔍 Page - Client - 1d. Clerk error state:", user.error);
+      setError(`Authentication error: ${user.error.message || 'Unknown error'}`);
+      isLoaded = true;
+      isSignedIn = false;
+    }
   } catch (err) {
-    console.error("🔍 Page - Client - 1d. Clerk hook error:", err);
-    setError(err instanceof Error ? err.message : 'Authentication error');
+    console.error("🔍 Page - Client - 1e. Clerk hook error:", err);
+    const errorMsg = err instanceof Error ? err.message : 'Authentication system error';
+    console.error("🔍 Page - Client - 1f. Error details:", {
+      errorType: typeof err,
+      errorStack: err instanceof Error ? err.stack : 'No stack available',
+      currentUrl: typeof window !== 'undefined' ? window.location.href : 'Server-side'
+    });
+    setError(errorMsg);
     // Fallback to showing welcome screen
     isLoaded = true;
     isSignedIn = false;
