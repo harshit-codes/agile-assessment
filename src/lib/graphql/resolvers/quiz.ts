@@ -217,6 +217,12 @@ export const quizResolvers = {
       { input }: { input: StartQuizSessionInput },
       { prisma }: Context
     ) => {
+      console.log('🚀 [GraphQL] Starting quiz session with input:', {
+        quizTitle: input.quizTitle,
+        clerkUserId: input.clerkUserId,
+        timestamp: new Date().toISOString()
+      })
+      
       const quizTitle = input.quizTitle || "The Agile Assessment"
 
       // Get quiz ID
@@ -225,8 +231,11 @@ export const quizResolvers = {
       })
 
       if (!quiz) {
+        console.error('❌ [GraphQL] Quiz not found:', quizTitle)
         throw new GraphQLError("Quiz not found")
       }
+
+      console.log('✅ [GraphQL] Quiz found:', { id: quiz.id, title: quiz.title })
 
       // Create new session
       const session = await prisma.quizSession.create({
@@ -238,6 +247,8 @@ export const quizResolvers = {
           clerkUserId: input.clerkUserId,
         },
       })
+
+      console.log('✅ [GraphQL] Session created:', { sessionId: session.id, quizId: quiz.id })
 
       return {
         sessionId: session.id,
@@ -251,8 +262,16 @@ export const quizResolvers = {
       { input }: { input: SubmitResponseInput },
       { prisma }: Context
     ) => {
+      console.log('📝 [GraphQL] Submitting response:', {
+        sessionId: input.sessionId,
+        questionId: input.questionId,
+        responseValue: input.responseValue,
+        timestamp: new Date().toISOString()
+      })
+
       // Validate response value is within range
       if (input.responseValue < -2 || input.responseValue > 2) {
+        console.error('❌ [GraphQL] Invalid response value:', input.responseValue)
         throw new GraphQLError("Response value must be between -2 and 2")
       }
 
@@ -263,6 +282,7 @@ export const quizResolvers = {
       })
 
       if (!session) {
+        console.error('❌ [GraphQL] Session not found:', input.sessionId)
         throw new GraphQLError("Session not found")
       }
 
