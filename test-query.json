@@ -1,0 +1,6 @@
+{
+  "query": "query GetPublicResult($slug: String!) { getPublicResult(slug: $slug) { userProfile { displayName slug } result { personalityCode } } }",
+  "variables": {
+    "slug": "user-31h1lpjfwci1xcr"
+  }
+}

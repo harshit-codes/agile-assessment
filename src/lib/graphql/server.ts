@@ -58,11 +58,19 @@ const server = new ApolloServer<Context>({
       extensions: error.extensions,
       stack: error.stack,
       timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV
+      environment: process.env.NODE_ENV,
+      originalError: error.originalError?.message,
+      originalStack: error.originalError?.stack,
     });
 
     // In production, provide more helpful error messages while maintaining security
     if (process.env.NODE_ENV === 'production') {
+      // For debugging: return detailed errors when flag is enabled
+      if (process.env.ENABLE_DETAILED_ERRORS === 'true') {
+        console.error('Returning detailed error for debugging:', error.message);
+        return error;
+      }
+      
       // Handle specific error types with user-friendly messages
       if (error.message.includes('Prisma') || error.message.includes('Database')) {
         console.error('Database Error:', error.message);
@@ -78,10 +86,7 @@ const server = new ApolloServer<Context>({
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return error; // Validation errors are safe
       }
-      // For debugging: return more context in development-like format
-      if (process.env.ENABLE_DETAILED_ERRORS === 'true') {
-        return error;
-      }
+      
       // Generic error for unexpected issues
       console.error('Unhandled GraphQL Error:', error.message);
       return new Error('An error occurred while processing your request');

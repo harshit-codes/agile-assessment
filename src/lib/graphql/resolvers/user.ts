@@ -135,6 +135,68 @@ export const userResolvers = {
   },
 
   Mutation: {
+    createUserProfile: async (
+      _: any,
+      { input }: { input: { clerkUserId: string; email: string; firstName?: string; lastName?: string; displayName?: string } },
+      { prisma }: Context
+    ) => {
+      // Check if profile already exists
+      const existingProfile = await prisma.userProfile.findUnique({
+        where: { clerkUserId: input.clerkUserId }
+      })
+
+      if (existingProfile) {
+        // Return existing profile instead of creating duplicate
+        return existingProfile
+      }
+
+      // Generate display name from provided data
+      let displayName = input.displayName
+      if (!displayName && input.firstName) {
+        displayName = input.lastName 
+          ? `${input.firstName} ${input.lastName}`
+          : input.firstName
+      }
+      if (!displayName) {
+        // Fallback to email-based display name
+        const emailPart = input.email.split('@')[0]
+        displayName = emailPart
+          .replace(/[._-]/g, ' ')
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ')
+      }
+
+      // Generate slug from display name
+      const baseSlug = generateSlugFromName(displayName, input.email)
+      let finalSlug = baseSlug
+      let counter = 1
+
+      // Ensure slug uniqueness
+      while (true) {
+        const existing = await prisma.userProfile.findUnique({
+          where: { slug: finalSlug }
+        })
+
+        if (!existing) break
+        finalSlug = `${baseSlug}-${counter}`
+        counter++
+      }
+
+      // Create new profile with real user data
+      const profile = await prisma.userProfile.create({
+        data: {
+          clerkUserId: input.clerkUserId,
+          email: input.email,
+          slug: finalSlug,
+          displayName: displayName,
+          onboardingComplete: false,
+        }
+      })
+
+      return profile
+    },
+
     updateOnboardingData: async (
       _: any,
       { input }: { input: OnboardingDataInput },
@@ -154,19 +216,19 @@ export const userResolvers = {
           }
         })
       } else {
-        // Create new profile with onboarding data
+        // Profile should have been created by webhook, but create fallback if missing
+        console.warn(`⚠️ No UserProfile found for onboarding update: ${input.clerkUserId}. Creating fallback profile.`)
+        
+        // Use createUserProfile logic as fallback (but with minimal data)
         const baseSlug = input.clerkUserId.toLowerCase().replace(/[^a-z0-9]/g, '-').substring(0, 20)
         let slug = baseSlug
         let counter = 1
 
-        // Check for slug uniqueness
         while (true) {
           const existingSlug = await prisma.userProfile.findUnique({
             where: { slug }
           })
-
           if (!existingSlug) break
-
           slug = `${baseSlug}-${counter}`
           counter++
         }
@@ -174,9 +236,9 @@ export const userResolvers = {
         profile = await prisma.userProfile.create({
           data: {
             clerkUserId: input.clerkUserId,
-            email: "",
+            email: "", // Will be updated by webhook or sharing flow later
             slug,
-            displayName: "",
+            displayName: "", // Will be updated by webhook or sharing flow later
             ...input.onboardingData,
           }
         })

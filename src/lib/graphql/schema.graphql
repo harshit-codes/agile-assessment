@@ -48,6 +48,7 @@ type Mutation {
   calculateAssessmentResult(sessionId: ID!): AssessmentResult!
   
   # User profile management
+  createUserProfile(input: CreateUserProfileInput!): UserProfile!
   updateOnboardingData(input: OnboardingDataInput!): UserProfile!
   updateUserSlug(input: UpdateUserSlugInput!): UserProfile!
   updateDisplayName(input: UpdateDisplayNameInput!): UserProfile!
@@ -77,6 +78,14 @@ input SubmitResponseInput {
   sessionId: ID!
   questionId: ID!
   responseValue: Int!
+}
+
+input CreateUserProfileInput {
+  clerkUserId: String!
+  email: String!
+  firstName: String
+  lastName: String
+  displayName: String
 }
 
 input OnboardingDataInput {

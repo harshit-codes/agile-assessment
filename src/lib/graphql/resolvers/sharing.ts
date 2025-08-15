@@ -56,9 +56,20 @@ export const sharingResolvers = {
       { prisma, auth }: Context
     ) => {
       // Get user profile by slug
-      const userProfile = await prisma.userProfile.findUnique({
+      let userProfile = await prisma.userProfile.findUnique({
         where: { slug }
       })
+
+      // If not found, try to find by partial slug match (for backward compatibility)
+      if (!userProfile && slug.startsWith('user-')) {
+        userProfile = await prisma.userProfile.findFirst({
+          where: {
+            slug: {
+              startsWith: slug
+            }
+          }
+        })
+      }
 
       if (!userProfile) {
         return null

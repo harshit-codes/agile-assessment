@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
-import { DELETE_USER_ACCOUNT } from '@/lib/graphql/operations';
+import { DELETE_USER_ACCOUNT, CREATE_USER_PROFILE } from '@/lib/graphql/operations';
 import { getClient } from '@/lib/apollo-client';
 
 // Clerk webhook event types
@@ -9,6 +9,12 @@ interface ClerkWebhookEvent {
   type: string;
   data: {
     id: string;
+    email_addresses?: Array<{
+      email_address: string;
+      verification: { status: string };
+    }>;
+    first_name?: string;
+    last_name?: string;
     [key: string]: any;
   };
 }
@@ -63,6 +69,67 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`✅ Webhook verified. Event type: ${event.type}`);
+
+    // Handle user creation event
+    if (event.type === 'user.created') {
+      const clerkUserId = event.data.id;
+      const emailAddresses = event.data.email_addresses || [];
+      const firstName = event.data.first_name;
+      const lastName = event.data.last_name;
+
+      // Get primary email address
+      const primaryEmail = emailAddresses.find(email => 
+        email.verification?.status === 'verified'
+      )?.email_address || emailAddresses[0]?.email_address;
+
+      if (!clerkUserId || !primaryEmail) {
+        console.error('❌ Missing required user data in creation event:', {
+          clerkUserId,
+          primaryEmail,
+          emailAddresses
+        });
+        return NextResponse.json(
+          { error: 'Missing required user data' },
+          { status: 400 }
+        );
+      }
+
+      console.log(`👤 Creating user profile for Clerk ID: ${clerkUserId}, Email: ${primaryEmail}`);
+
+      try {
+        // Call GraphQL mutation to create user profile
+        const client = getClient();
+        const result = await client.mutate({
+          mutation: CREATE_USER_PROFILE,
+          variables: {
+            input: {
+              clerkUserId,
+              email: primaryEmail,
+              firstName: firstName || undefined,
+              lastName: lastName || undefined,
+            }
+          }
+        });
+
+        console.log('✅ User profile creation completed:', result.data);
+
+        return NextResponse.json({
+          success: true,
+          message: 'User profile created successfully',
+          result: result.data
+        });
+
+      } catch (graphqlError) {
+        console.error('❌ Error creating user profile via GraphQL:', graphqlError);
+        
+        // Return 200 to prevent Clerk from retrying if it's a data issue
+        return NextResponse.json({
+          success: false,
+          message: 'Error creating user profile',
+          error: graphqlError instanceof Error ? graphqlError.message : 'Unknown GraphQL error'
+        }, { status: 500 });
+      }
+    }
 
     // Handle user deletion event
     if (event.type === 'user.deleted') {

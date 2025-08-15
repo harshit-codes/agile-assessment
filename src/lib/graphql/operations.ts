@@ -298,6 +298,21 @@ export const CALCULATE_ASSESSMENT_RESULT = gql`
   }
 `
 
+export const CREATE_USER_PROFILE = gql`
+  mutation CreateUserProfile($input: CreateUserProfileInput!) {
+    createUserProfile(input: $input) {
+      id
+      clerkUserId
+      email
+      slug
+      displayName
+      onboardingComplete
+      createdAt
+      updatedAt
+    }
+  }
+`
+
 export const UPDATE_ONBOARDING_DATA = gql`
   mutation UpdateOnboardingData($input: OnboardingDataInput!) {
     updateOnboardingData(input: $input) {

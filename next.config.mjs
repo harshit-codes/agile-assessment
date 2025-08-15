@@ -14,7 +14,8 @@ const nextConfig = {
   // Skip TypeScript errors during build for deployment
   // TODO: Remove this once Prisma Accelerate type issues are resolved
   typescript: {
-    ignoreBuildErrors: true,
+    // Temporarily enable TypeScript checking to identify issues
+    ignoreBuildErrors: process.env.ENABLE_DETAILED_ERRORS !== 'true',
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -33,7 +34,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    // Temporarily preserve console logs for GraphQL debugging
+    removeConsole: process.env.NODE_ENV === 'production' && process.env.ENABLE_DETAILED_ERRORS !== 'true',
     // Remove unused imports in production
     reactRemoveProperties: process.env.NODE_ENV === 'production',
   },

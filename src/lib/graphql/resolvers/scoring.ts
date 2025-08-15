@@ -179,33 +179,11 @@ export const scoringResolvers = {
           where: { clerkUserId: session.clerkUserId }
         })
 
-        // Create profile if it doesn't exist
+        // Profile should exist from signup webhook, but handle gracefully if missing
         if (!userProfile) {
-          const baseSlug = session.clerkUserId.toLowerCase().replace(/[^a-z0-9]/g, '-').substring(0, 20)
-          let slug = baseSlug
-          let counter = 1
-
-          // Check for slug uniqueness
-          while (true) {
-            const existingSlug = await prisma.userProfile.findUnique({
-              where: { slug }
-            })
-
-            if (!existingSlug) break
-
-            slug = `${baseSlug}-${counter}`
-            counter++
-          }
-
-          userProfile = await prisma.userProfile.create({
-            data: {
-              clerkUserId: session.clerkUserId,
-              email: "",
-              slug,
-              displayName: "",
-              onboardingComplete: false,
-            }
-          })
+          console.warn(`⚠️ No UserProfile found for clerkUserId: ${session.clerkUserId}. User may have completed quiz before profile creation.`)
+          // Don't create profile with empty data - let quiz results exist without profile
+          // The sharing/onboarding flow will create the profile with real data when needed
         }
       }
 
