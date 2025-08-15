@@ -57,7 +57,8 @@ export async function generateMetadata({
       // Smart title generation: personalized if real name exists, generic if not
       const hasRealDisplayName = displayName && 
         displayName.trim() !== '' && 
-        displayName !== 'Assessment Participant';
+        displayName !== 'Assessment Participant' &&
+        !displayName.toLowerCase().includes('user');
       
       const titleText = hasRealDisplayName 
         ? `${displayName}'s Agile DNA Report`
@@ -115,10 +116,11 @@ export async function generateMetadata({
         }
       };
     } else {
-      // Generic result metadata when personality type can't be determined
+      // Generic result metadata when personality type can't be determined  
       const hasRealDisplayName = displayName && 
         displayName.trim() !== '' && 
-        displayName !== 'Assessment Participant';
+        displayName !== 'Assessment Participant' &&
+        !displayName.toLowerCase().includes('user');
       
       const titleText = hasRealDisplayName 
         ? `${displayName}'s Agile DNA Report`
