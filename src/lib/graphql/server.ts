@@ -63,14 +63,19 @@ const server = new ApolloServer<Context>({
       originalStack: error.originalError?.stack,
     });
 
+    // For debugging: always return detailed errors when flag is enabled
+    if (process.env.ENABLE_DETAILED_ERRORS === 'true') {
+      console.error('Returning detailed error for debugging:', error.message);
+      return {
+        message: error.message,
+        locations: error.locations,
+        path: error.path,
+        extensions: error.extensions
+      };
+    }
+
     // In production, provide more helpful error messages while maintaining security
     if (process.env.NODE_ENV === 'production') {
-      // For debugging: return detailed errors when flag is enabled
-      if (process.env.ENABLE_DETAILED_ERRORS === 'true') {
-        console.error('Returning detailed error for debugging:', error.message);
-        return error;
-      }
-      
       // Handle specific error types with user-friendly messages
       if (error.message.includes('Prisma') || error.message.includes('Database')) {
         console.error('Database Error:', error.message);
