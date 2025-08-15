@@ -54,9 +54,14 @@ export async function generateMetadata({
       const characteristics = personalityType.strengths.slice(0, 4).join(',');
       const ogImageUrl = `/api/og/personality-report?name=${encodeURIComponent(personalityType.name)}&shortName=${personalityType.shortName}&userName=${encodeURIComponent(displayName)}&description=${encodeURIComponent(personalityType.description)}&characteristics=${encodeURIComponent(characteristics)}&motto=${encodeURIComponent(`"${personalityType.strengths[0]}"`)}`;
 
-      // Always use generic title for clean professional presentation
-      // Avoid showing auto-generated or low-quality display names
-      const titleText = `Agile Assessment Report`;
+      // Smart title generation: personalized if real name exists, generic if not
+      const hasRealDisplayName = displayName && 
+        displayName.trim() !== '' && 
+        displayName !== 'Assessment Participant';
+      
+      const titleText = hasRealDisplayName 
+        ? `${displayName}'s Agile DNA Report`
+        : `Agile DNA Report`;
 
       return {
         title: `${titleText} | The Agile Assessment`,
@@ -111,11 +116,19 @@ export async function generateMetadata({
       };
     } else {
       // Generic result metadata when personality type can't be determined
+      const hasRealDisplayName = displayName && 
+        displayName.trim() !== '' && 
+        displayName !== 'Assessment Participant';
+      
+      const titleText = hasRealDisplayName 
+        ? `${displayName}'s Agile DNA Report`
+        : `Agile DNA Report`;
+        
       return {
-        title: `Agile Assessment Report | The Agile Assessment`,
+        title: `${titleText} | The Agile Assessment`,
         description: `Discover your Agile DNA with this 4-dimensional personality assessment. Explore personality profiles and ideal Agile team roles based on work style, decision process, communication style, and focus orientation.`,
         openGraph: {
-          title: `Agile Assessment Report`,
+          title: titleText,
           description: `Discover your Agile DNA with this 4-dimensional personality assessment and ideal team roles.`,
           type: 'profile',
           url: `/results/${slug}`,
@@ -131,7 +144,7 @@ export async function generateMetadata({
         },
         twitter: {
           card: 'summary_large_image',
-          title: `Agile Assessment Report`,
+          title: titleText,
           description: `Discover your Agile DNA with this 4-dimensional personality assessment and ideal team roles.`,
           images: [
             `/api/og/personality-report?userName=${encodeURIComponent(displayName)}&name=Agile%20Assessment%20Results&shortName=QUIZ&description=4-dimensional%20personality%20assessment&characteristics=Comprehensive,Data-driven,Career-focused,Team-oriented&motto=Discover%20Your%20Perfect%20Agile%20Role`
