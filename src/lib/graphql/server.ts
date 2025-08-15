@@ -23,8 +23,8 @@ const schema = makeExecutableSchema({
 // Create Apollo Server
 const server = new ApolloServer<Context>({
   schema,
-  // Enable GraphQL Playground in development
-  introspection: process.env.NODE_ENV !== 'production',
+  // Enable GraphQL Playground in development and debugging mode
+  introspection: process.env.NODE_ENV !== 'production' || process.env.ENABLE_DETAILED_ERRORS === 'true',
   // Disable playground in production for security
   plugins: [
     // Custom error formatting for production
