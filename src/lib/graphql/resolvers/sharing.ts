@@ -116,14 +116,10 @@ export const sharingResolvers = {
       // Check if viewer is the owner (handle unauthenticated users)
       const isViewerOwner = auth?.userId === userProfile.clerkUserId
 
-      // Generate display name if one doesn't exist
+      // Use real display name, fallback to generic if missing (which is now an error)
       const displayName = userProfile.displayName || 
         generateDisplayNameFromEmail(userProfile.email || '') || 
-        userProfile.slug
-          .replace(/[._-]/g, ' ')
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ')
+        'Assessment Participant'
 
       return {
         userProfile: {
@@ -134,7 +130,6 @@ export const sharingResolvers = {
         },
         result: {
           ...result,
-          personalityType: result.personalityType,
           traits: result.traitScores,
           overallFit: result.overallFitScore,
         },

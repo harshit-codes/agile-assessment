@@ -192,7 +192,7 @@ export const scoringResolvers = {
         where: { sessionId }
       })
 
-      // Create or update result
+      // Create or update result (public by default for sharing)
       const result = existingResult 
         ? await prisma.quizResult.update({
             where: { id: existingResult.id },
@@ -205,6 +205,8 @@ export const scoringResolvers = {
               confidence,
               overallFitScore: overallFit,
               calculatedAt: new Date(),
+              isPublic: true,
+              sharedAt: new Date(),
             },
             include: {
               personalityType: true
@@ -220,6 +222,8 @@ export const scoringResolvers = {
               traitScores: traitResults,
               confidence,
               overallFitScore: overallFit,
+              isPublic: true,
+              sharedAt: new Date(),
             },
             include: {
               personalityType: true

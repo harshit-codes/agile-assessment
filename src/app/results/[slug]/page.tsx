@@ -54,17 +54,9 @@ export async function generateMetadata({
       const characteristics = personalityType.strengths.slice(0, 4).join(',');
       const ogImageUrl = `/api/og/personality-report?name=${encodeURIComponent(personalityType.name)}&shortName=${personalityType.shortName}&userName=${encodeURIComponent(displayName)}&description=${encodeURIComponent(personalityType.description)}&characteristics=${encodeURIComponent(characteristics)}&motto=${encodeURIComponent(`"${personalityType.strengths[0]}"`)}`;
 
-      // Smart title generation: use personalized title if display name is good quality
-      const isQualityDisplayName = displayName && 
-        !displayName.startsWith('User ') && 
-        !displayName.includes('user') &&
-        displayName.length > 3 &&
-        !displayName.match(/^[a-z0-9-]+$/i) && // not just slug format
-        displayName.includes(' '); // likely a real name with space
-      
-      const titleText = isQualityDisplayName 
-        ? `${displayName}'s Agile Personality Report`
-        : `Agile Assessment Report`;
+      // Always use generic title for clean professional presentation
+      // Avoid showing auto-generated or low-quality display names
+      const titleText = `Agile Assessment Report`;
 
       return {
         title: `${titleText} | The Agile Assessment`,

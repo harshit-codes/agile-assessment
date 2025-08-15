@@ -5,6 +5,9 @@ import { GraphQLProvider } from "@/lib/graphql-provider";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
+// Import startup hooks to trigger webhook auto-setup
+import "@/lib/startup-hooks";
+
 // Primary body font - Funnel Sans via Inter fallback for now
 const funnelSans = Inter({ 
   subsets: ["latin"],
